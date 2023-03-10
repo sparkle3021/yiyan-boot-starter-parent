@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.oho.redis.config.RedissonAutoConfiguration, \
+    com.oho.redis.config.RedisTemplateConfig
