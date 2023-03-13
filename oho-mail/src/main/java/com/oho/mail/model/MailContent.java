@@ -1,4 +1,4 @@
-package com.oho.common.utils.mail.model;
+package com.oho.mail.model;
 
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;

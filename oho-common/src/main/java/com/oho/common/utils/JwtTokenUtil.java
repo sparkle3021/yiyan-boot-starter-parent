@@ -7,8 +7,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -22,9 +20,57 @@ import java.util.Map;
  * @createDate 2022 /11/24
  */
 @Slf4j
-@Component
 @Getter
 public class JwtTokenUtil {
+
+    private static volatile JwtTokenUtil jwtTokenUtil;
+
+    private JwtTokenUtil() {
+    }
+
+    private JwtTokenUtil(long tokenExpire, long refreshTokenExpire, String secret) {
+        this.tokenExpire = tokenExpire;
+        this.refreshTokenExpire = refreshTokenExpire;
+        this.secret = secret;
+    }
+
+    public static JwtTokenUtil getInstance() {
+        if (jwtTokenUtil == null) {
+            synchronized (JwtTokenUtil.class) {
+                if (jwtTokenUtil == null) {
+                    jwtTokenUtil = new JwtTokenUtil();
+                }
+            }
+        }
+        return jwtTokenUtil;
+    }
+
+    public static JwtTokenUtil getInstance(long tokenExpire, long refreshTokenExpire, String secret) {
+        if (jwtTokenUtil == null) {
+            synchronized (JwtTokenUtil.class) {
+                if (jwtTokenUtil == null) {
+                    jwtTokenUtil = new JwtTokenUtil(tokenExpire, refreshTokenExpire, secret);
+                }
+            }
+        }
+        return jwtTokenUtil;
+    }
+
+    /**
+     * Token 过期时间，默认7200s
+     */
+    private long tokenExpire = 7200;
+
+    /**
+     * 刷新Token过期时间，默认7天，
+     */
+    private long refreshTokenExpire = 604800;
+
+    /**
+     * 密钥
+     */
+    private String secret = "70bb34ea1aa6466b";
+
 
     /**
      * The constant CLAIM_KEY_USERNAME.
@@ -34,15 +80,6 @@ public class JwtTokenUtil {
      * The constant CLAIM_KEY_CREATED.
      */
     public static final String CLAIM_KEY_CREATED = "created";
-
-    @Value("${token.expire}")
-    private Long tokenExpire;
-
-    @Value("${token.refresh.expire}")
-    private Long refreshTokenExpire;
-
-    @Value("${token.secret}")
-    private String secret;
 
     /**
      * 根据负责生成JWT的token
@@ -209,10 +246,7 @@ public class JwtTokenUtil {
         Date created = claims.get(CLAIM_KEY_CREATED, Date.class);
         Date refreshDate = new Date();
         //刷新时间在创建时间的指定时间内
-        if (refreshDate.after(created) && refreshDate.before(DateUtil.offsetSecond(created, time))) {
-            return true;
-        }
-        return false;
+        return refreshDate.after(created) && refreshDate.before(DateUtil.offsetSecond(created, time));
     }
 
     /**

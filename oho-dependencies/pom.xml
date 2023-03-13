@@ -11,6 +11,7 @@
         <relativePath/>
     </parent>
 
+    <groupId>com.oho</groupId>
     <artifactId>oho-dependencies</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
@@ -21,6 +22,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <oho-module.version>1.0</oho-module.version>
         <java.version>1.8</java.version>
         <spring-boot.version>2.7.6</spring-boot.version>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
@@ -54,6 +56,7 @@
         <module>../oho-payment</module>
         <module>../oho-minio</module>
         <module>../oho-elasticsearch</module>
+        <module>../oho-mail</module>
     </modules>
 
     <dependencyManagement>
@@ -76,22 +79,37 @@
             <dependency>
                 <groupId>com.oho</groupId>
                 <artifactId>oho-common</artifactId>
-                <version>${project.version}</version>
+                <version>${oho-module.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.oho</groupId>
                 <artifactId>oho-elasticsearch</artifactId>
-                <version>${project.version}</version>
+                <version>${oho-module.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.oho</groupId>
                 <artifactId>oho-payment</artifactId>
-                <version>${project.version}</version>
+                <version>${oho-module.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.oho</groupId>
                 <artifactId>oho-quartz</artifactId>
-                <version>${project.version}</version>
+                <version>${oho-module.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oho</groupId>
+                <artifactId>oho-mail</artifactId>
+                <version>${oho-module.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oho</groupId>
+                <artifactId>oho-minio</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oho</groupId>
+                <artifactId>oho-redis</artifactId>
+                <version>1.0</version>
             </dependency>
             <!-- OHO 模块 -->
 
@@ -214,41 +232,41 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <nonFilteredFileExtensions>
-                        <nonFilteredFileExtension>xls</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>doc</nonFilteredFileExtension>
-                        <nonFilteredFileExtension>docx</nonFilteredFileExtension>
-                    </nonFilteredFileExtensions>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <!--    <build>-->
+    <!--        <plugins>-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+    <!--                <configuration>-->
+    <!--                    <source>1.8</source>-->
+    <!--                    <target>1.8</target>-->
+    <!--                </configuration>-->
+    <!--            </plugin>-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-source-plugin</artifactId>-->
+    <!--                <executions>-->
+    <!--                    <execution>-->
+    <!--                        <id>attach-sources</id>-->
+    <!--                        <goals>-->
+    <!--                            <goal>jar</goal>-->
+    <!--                        </goals>-->
+    <!--                    </execution>-->
+    <!--                </executions>-->
+    <!--            </plugin>-->
+    <!--            <plugin>-->
+    <!--                <groupId>org.apache.maven.plugins</groupId>-->
+    <!--                <artifactId>maven-resources-plugin</artifactId>-->
+    <!--                <configuration>-->
+    <!--                    <nonFilteredFileExtensions>-->
+    <!--                        <nonFilteredFileExtension>xls</nonFilteredFileExtension>-->
+    <!--                        <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>-->
+    <!--                        <nonFilteredFileExtension>doc</nonFilteredFileExtension>-->
+    <!--                        <nonFilteredFileExtension>docx</nonFilteredFileExtension>-->
+    <!--                    </nonFilteredFileExtensions>-->
+    <!--                </configuration>-->
+    <!--            </plugin>-->
+    <!--        </plugins>-->
+    <!--    </build>-->
 
 </project>

@@ -10,21 +10,21 @@
         <relativePath>../oho-dependencies/pom.xml</relativePath>
     </parent>
 
-    <artifactId>oho-elasticsearch</artifactId>
+    <artifactId>oho-mail</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+    <name>oho-mail</name>
 
     <dependencies>
         <dependency>
             <groupId>com.oho</groupId>
             <artifactId>oho-common</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
     </dependencies>
+
+
 </project>

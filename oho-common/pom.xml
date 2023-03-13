@@ -7,11 +7,13 @@
         <groupId>com.oho</groupId>
         <artifactId>oho-dependencies</artifactId>
         <version>1.0</version>
-        <relativePath/>
+        <relativePath>../oho-dependencies/pom.xml</relativePath>
     </parent>
+
 
     <artifactId>oho-common</artifactId>
     <version>1.0</version>
+    <packaging>jar</packaging>
     <name>oho-common</name>
     <description>通用模块</description>
 
@@ -46,18 +48,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
         <!-- Spring Boot Starter End -->
 
         <!-- Druid Start -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>${druid.version}</version>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>com.alibaba</groupId>-->
+        <!--            <artifactId>druid-spring-boot-starter</artifactId>-->
+        <!--            <version>${druid.version}</version>-->
+        <!--        </dependency>-->
         <!-- Druid End -->
 
         <!-- Swagger UI Starter -->

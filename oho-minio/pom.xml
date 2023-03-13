@@ -7,7 +7,7 @@
         <groupId>com.oho</groupId>
         <artifactId>oho-dependencies</artifactId>
         <version>1.0</version>
-        <relativePath/>
+        <relativePath>../oho-dependencies/pom.xml</relativePath>
     </parent>
 
     <artifactId>oho-minio</artifactId>

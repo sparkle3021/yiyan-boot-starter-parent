@@ -1,10 +1,10 @@
-package com.oho.common.utils.mail;
+package com.oho.mail;
 
 import com.oho.common.enums.YesNoEnum;
 import com.oho.common.exception.Asserts;
 import com.oho.common.utils.CollectionUtils;
 import com.oho.common.utils.StringUtils;
-import com.oho.common.utils.mail.model.MailContent;
+import com.oho.mail.model.MailContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,9 +88,12 @@ public class MailUtils {
             // 设置邮件内容
             multipartMessage.setText(mailContent.getContent(), ENABLE_HTML);
             // 添加附件
-            for (MultipartFile attachmentFile : mailContent.getAttachmentFiles()) {
-                multipartMessage.addAttachment(attachmentFile.getName(), attachmentFile);
+            if (CollectionUtils.isNotEmpty(mailContent.getAttachmentFiles())) {
+                for (MultipartFile attachmentFile : mailContent.getAttachmentFiles()) {
+                    multipartMessage.addAttachment(attachmentFile.getName(), attachmentFile);
+                }
             }
+
             mailSender.send(message);
         } catch (Exception e) {
             log.error("邮件发送失败 ： [{}] - [{}]", e.getMessage(), e);
