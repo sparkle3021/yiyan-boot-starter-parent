@@ -23,4 +23,7 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>oho-rocketmq</finalName>
+    </build>
 </project>

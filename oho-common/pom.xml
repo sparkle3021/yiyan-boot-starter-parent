@@ -50,14 +50,6 @@
         </dependency>
         <!-- Spring Boot Starter End -->
 
-        <!-- Druid Start -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.alibaba</groupId>-->
-        <!--            <artifactId>druid-spring-boot-starter</artifactId>-->
-        <!--            <version>${druid.version}</version>-->
-        <!--        </dependency>-->
-        <!-- Druid End -->
-
         <!-- Swagger UI Starter -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -65,19 +57,6 @@
             <version>${swagger.version}</version>
         </dependency>
         <!-- Swagger UI End -->
-
-        <!-- MyBatis Start -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
-            <version>${mybatis-plus.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>${mybatis.version}</version>
-        </dependency>
-        <!-- MyBatis End -->
 
         <!-- Logback Starter -->
         <dependency>

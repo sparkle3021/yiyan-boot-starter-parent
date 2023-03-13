@@ -32,4 +32,7 @@
         <!-- Redisson End -->
     </dependencies>
 
+    <build>
+        <finalName>oho-redis</finalName>
+    </build>
 </project>

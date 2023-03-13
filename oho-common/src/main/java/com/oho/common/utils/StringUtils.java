@@ -347,7 +347,7 @@ public class StringUtils extends StrUtil {
         for (int i = 0; i < len; i++) {
             char c = param.charAt(i);
             if (Character.isUpperCase(c)) {
-                sb.append(com.baomidou.mybatisplus.core.toolkit.StringUtils.UNDERLINE);
+                sb.append(StringUtils.UNDERLINE);
             }
             if (upperCase) {
                 //统一都转大写

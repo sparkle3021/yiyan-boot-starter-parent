@@ -25,4 +25,8 @@
         </dependency>
         <!-- MinIO End -->
     </dependencies>
+
+    <build>
+        <finalName>oho-minio</finalName>
+    </build>
 </project>

@@ -1,7 +1,7 @@
 package com.oho.common.filter;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.oho.common.enums.HttpMethod;
+import com.oho.common.utils.StringUtils;
 import org.springframework.util.ObjectUtils;
 
 import javax.servlet.*;
@@ -23,7 +23,7 @@ public class XssFilter implements Filter {
     public List<String> excludes = new ArrayList<>();
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         String tempExcludes = filterConfig.getInitParameter("excludes");
         if (StringUtils.isNotEmpty(tempExcludes)) {
             String[] url = tempExcludes.split(",");

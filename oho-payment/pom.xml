@@ -25,4 +25,7 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>oho-payment</finalName>
+    </build>
 </project>
