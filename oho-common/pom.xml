@@ -50,14 +50,6 @@
         </dependency>
         <!-- Spring Boot Starter End -->
 
-        <!-- Swagger UI Starter -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-        <!-- Swagger UI End -->
-
         <!-- Logback Starter -->
         <dependency>
             <groupId>ch.qos.logback</groupId>

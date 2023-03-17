@@ -111,6 +111,11 @@
                 <artifactId>oho-redis</artifactId>
                 <version>1.0</version>
             </dependency>
+            <dependency>
+                <groupId>com.oho</groupId>
+                <artifactId>oho-rocketmq</artifactId>
+                <version>1.0</version>
+            </dependency>
             <!-- OHO 模块 -->
 
             <!-- Druid Start -->

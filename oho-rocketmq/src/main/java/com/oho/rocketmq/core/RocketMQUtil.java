@@ -8,6 +8,7 @@ import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class RocketMQUtil {
+public class RocketMQUtil<T> {
 
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
@@ -30,7 +31,8 @@ public class RocketMQUtil {
     /**
      * 消息超时时间
      */
-    private final long timeout = rocketMQTemplate.getProducer().getSendMsgTimeout();
+    @Value("${rocketmq.producer.send-message-timeout:3000}")
+    private long timeout;
 
     private String checkDestination(String destination) {
         if (StringUtils.isBlank(destination)) {
@@ -44,10 +46,10 @@ public class RocketMQUtil {
      *
      * @param messageBody the message body
      */
-    public void syncSend(MQMessage messageBody) {
+    public void syncSend(MQMessage<T> messageBody) {
         String destination = checkDestination(messageBody.getDestination());
         log.info("ROCKETMQ 同步消息发送 ：[{}] - [{}] - [{}]", destination, messageBody.getMessageId(), messageBody);
-        Message<Object> message = MessageBuilder.withPayload(messageBody.getContent()).build();
+        Message<T> message = MessageBuilder.withPayload(messageBody.getContent()).build();
         SendResult sendResult;
         if (StringUtils.isNotBlank(messageBody.getHashKey())) {
             sendResult = rocketMQTemplate.syncSendOrderly(destination, message, messageBody.getHashKey(), timeout);
@@ -62,10 +64,10 @@ public class RocketMQUtil {
      *
      * @param messageBody the message body
      */
-    public void syncSendBatch(MQMessage messageBody) {
+    public void syncSendBatch(MQMessage<T> messageBody) {
         String destination = checkDestination(messageBody.getDestination());
         log.info("ROCKETMQ 同步消息-批量发送 ：[{}] - [{}] - [{}]", destination, messageBody.getMessageId(), messageBody.getContents());
-        List<Message<Object>> messageList = messageBody.getContents()
+        List<Message<T>> messageList = messageBody.getContents()
                 .stream()
                 .map(content -> MessageBuilder.withPayload(content).build())
                 .collect(Collectors.toList());
@@ -83,10 +85,10 @@ public class RocketMQUtil {
      *
      * @param messageBody the message body
      */
-    public void asyncSend(MQMessage messageBody) {
+    public void asyncSend(MQMessage<T> messageBody) {
         String destination = checkDestination(messageBody.getDestination());
         log.info("ROCKETMQ 异步消息发送 ：[{}] - [{}] - [{}]", destination, messageBody.getMessageId(), messageBody);
-        Message<Object> message = MessageBuilder.withPayload(messageBody.getContent()).build();
+        Message<T> message = MessageBuilder.withPayload(messageBody.getContent()).build();
         if (StringUtils.isNotBlank(messageBody.getHashKey())) {
             rocketMQTemplate.asyncSendOrderly(destination, message, messageBody.getHashKey(),
                     asyncSendCallback(destination, messageBody.getMessageId()));
@@ -101,10 +103,10 @@ public class RocketMQUtil {
      *
      * @param messageBody the message body
      */
-    public void asyncSendBatch(MQMessage messageBody) {
+    public void asyncSendBatch(MQMessage<T> messageBody) {
         String destination = checkDestination(messageBody.getDestination());
         log.info("ROCKETMQ 异步消息-批量发送 ：[{}] - [{}] - [{}]", destination, messageBody.getMessageId(), messageBody.getContents());
-        List<Message<Object>> messageList = messageBody.getContents()
+        List<Message<T>> messageList = messageBody.getContents()
                 .stream()
                 .map(content -> MessageBuilder.withPayload(content).build())
                 .collect(Collectors.toList());
@@ -137,10 +139,10 @@ public class RocketMQUtil {
      *
      * @param messageBody the message body
      */
-    public void sendOneWay(MQMessage messageBody) {
+    public void sendOneWay(MQMessage<T> messageBody) {
         String destination = checkDestination(messageBody.getDestination());
         log.info("ROCKETMQ 单向消息发送 ：[{}] - [{}] - [{}]", destination, messageBody.getMessageId(), messageBody);
-        Message<Object> message = MessageBuilder.withPayload(messageBody.getContent()).build();
+        Message<T> message = MessageBuilder.withPayload(messageBody.getContent()).build();
         if (StringUtils.isNotBlank(messageBody.getHashKey())) {
             rocketMQTemplate.sendOneWayOrderly(destination, message, messageBody.getHashKey());
         } else {
@@ -153,8 +155,8 @@ public class RocketMQUtil {
      *
      * @param messageList the message list
      */
-    public void sendOneWayBatch(List<MQMessage> messageList) {
-        for (MQMessage messageBody : messageList) {
+    public void sendOneWayBatch(List<MQMessage<T>> messageList) {
+        for (MQMessage<T> messageBody : messageList) {
             sendOneWay(messageBody);
         }
     }

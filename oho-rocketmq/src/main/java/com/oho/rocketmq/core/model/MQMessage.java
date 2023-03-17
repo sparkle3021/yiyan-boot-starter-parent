@@ -12,7 +12,7 @@ import java.util.List;
  * @author MENGJIAO
  */
 @Data
-public class MQMessage {
+public class MQMessage<T> {
     /**
      * 消息Topic
      */
@@ -40,11 +40,11 @@ public class MQMessage {
     /**
      * 消息内容
      */
-    private Object content;
+    private T content;
     /**
      * 消息内容
      */
-    private List<Object> contents;
+    private List<T> contents;
     /**
      * 使用有序消息发送时，指定发送到队列
      */
@@ -67,14 +67,14 @@ public class MQMessage {
         return destination;
     }
 
-    public MQMessage(String destination, Object content) {
+    public MQMessage(String destination, T content) {
         this.destination = destination;
         this.messageId = IdUtils.getSnowflakeNextIdStr();
         this.generationTime = System.currentTimeMillis();
         this.content = content;
     }
 
-    public MQMessage(String topic, String tag, Object content) {
+    public MQMessage(String topic, String tag, T content) {
         this.topic = topic;
         this.tag = tag;
         this.messageId = IdUtils.getSnowflakeNextIdStr();
@@ -82,7 +82,7 @@ public class MQMessage {
         this.content = content;
     }
 
-    public MQMessage(String topic, String tag, String source, Object content) {
+    public MQMessage(String topic, String tag, String source, T content) {
         this.topic = topic;
         this.tag = tag;
         this.messageId = IdUtils.getSnowflakeNextIdStr();
@@ -91,7 +91,7 @@ public class MQMessage {
         this.content = content;
     }
 
-    public MQMessage(String topic, String tag, String messageId, String source, Object content) {
+    public MQMessage(String topic, String tag, String messageId, String source, T content) {
         this.topic = topic;
         this.tag = tag;
         this.messageId = messageId;
