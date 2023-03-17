@@ -1,4 +1,4 @@
-package com.oho.common.enums;
+package com.oho.redis.config;
 
 /**
  * Redisson 所类型

@@ -1,6 +1,6 @@
 package com.oho.redis.core;
 
-import com.oho.common.enums.RLockEnum;
+import com.oho.redis.config.RLockEnum;
 import com.oho.common.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
