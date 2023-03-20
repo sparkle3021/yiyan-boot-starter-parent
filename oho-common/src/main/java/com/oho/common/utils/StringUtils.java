@@ -164,9 +164,6 @@ public class StringUtils extends StrUtil {
      * 拼接多个字符
      *
      * @param targets the targets
-     * @return the string
-     * @author yezhangle
-     * @date 2018 /3/26.
      */
     public static String append(String... targets) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -338,10 +335,11 @@ public class StringUtils extends StrUtil {
      * @param upperCase 是否全大写
      * @return 结果
      */
-    public static String camelToUnderline(String param, boolean upperCase) {
+    public static String camelToUnderline(String param, boolean... upperCase) {
         if (param == null || "".equals(param.trim())) {
             return "";
         }
+
         int len = param.length();
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++) {
@@ -349,7 +347,7 @@ public class StringUtils extends StrUtil {
             if (Character.isUpperCase(c)) {
                 sb.append(StringUtils.UNDERLINE);
             }
-            if (upperCase) {
+            if (upperCase[0]) {
                 //统一都转大写
                 sb.append(Character.toUpperCase(c));
             } else {

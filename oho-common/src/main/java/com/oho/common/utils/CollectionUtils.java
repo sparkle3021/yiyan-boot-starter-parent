@@ -3,17 +3,17 @@ package com.oho.common.utils;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ArrayUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 集合工具类
  *
  * @author Sparkler
  */
+@Slf4j
 public class CollectionUtils extends CollectionUtil {
 
 
@@ -130,5 +130,49 @@ public class CollectionUtils extends CollectionUtil {
         T[] arr = ArrayUtil.newArray(clazz, data.size());
         arr = data.toArray(arr);
         return arr;
+    }
+
+    /**
+     * 将字符串转换为列表
+     *
+     * @param str    字符串
+     * @param symbol 分隔符
+     * @return the list by string
+     */
+    public static List<String> getListByString(String str, String symbol) {
+        List<String> list = new ArrayList<>();
+        if (StringUtils.isBlank(str)) {
+            return list;
+        }
+        String[] array = str.split(symbol);
+        list = Arrays.asList(array);
+        return list;
+    }
+
+
+    /**
+     * 集合转换复制
+     *
+     * @param <S>         the type parameter
+     * @param <T>         the type parameter
+     * @param sCollection the s collection
+     * @param tClass      the t class
+     * @return the list
+     */
+    public static <S, T> List<T> copyList(Collection<S> sCollection, Class<T> tClass) {
+        List<T> list = new ArrayList<>();
+        if (sCollection == null || sCollection.size() == 0) {
+            return list;
+        }
+        try {
+            for (S s : sCollection) {
+                T t = tClass.newInstance();
+                BeanUtils.copyProperties(s, t);
+                list.add(t);
+            }
+        } catch (Exception e) {
+            log.error("列表转换失败", e);
+        }
+        return list;
     }
 }

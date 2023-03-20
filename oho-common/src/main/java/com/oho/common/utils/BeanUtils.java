@@ -1,5 +1,6 @@
 package com.oho.common.utils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -116,5 +117,15 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
          * @param t the t
          */
         void callBack(S s, T t);
+    }
+
+    public static <T> boolean fieldInClass(String fieldName,Class<T> clazz){
+        Field[] fields=clazz.getDeclaredFields();
+        for(Field field:fields){
+            if(field.getName().equals(fieldName)){
+                return true;
+            }
+        }
+        return false;
     }
 }
