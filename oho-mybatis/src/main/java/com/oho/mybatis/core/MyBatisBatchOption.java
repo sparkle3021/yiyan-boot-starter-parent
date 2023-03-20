@@ -2,8 +2,12 @@ package com.oho.mybatis.core;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 
 import java.util.List;
 
@@ -17,6 +21,12 @@ import java.util.List;
 @Slf4j
 @Component
 public class MyBatisBatchOption<T> {
+
+    @Autowired
+    private DataSourceTransactionManager dataSourceTransactionManager;
+    @Autowired
+    private TransactionDefinition transactionDefinition;
+
 
     /**
      * 批量插入，单线程循环插入
@@ -49,7 +59,15 @@ public class MyBatisBatchOption<T> {
      */
     @Async
     public void asyncBatchInsert(IService<T> service, List<T> records, int batchSize) {
-        batchInsert(service, records, batchSize);
+        TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
+        try {
+            batchInsert(service, records, batchSize);
+            dataSourceTransactionManager.commit(transactionStatus);
+            log.error("MyBatis - 异步批量新增成功");
+        } catch (Exception e) {
+            dataSourceTransactionManager.rollback(transactionStatus);
+            log.error("MyBatis - 异步批量新增失败 - 操作回滚", e);
+        }
     }
 
     /**
@@ -83,7 +101,15 @@ public class MyBatisBatchOption<T> {
      */
     @Async
     public void asyncBatchDelete(IService<T> service, List<T> records, int batchSize) {
-        batchDelete(service, records, batchSize);
+        TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
+        try {
+            batchDelete(service, records, batchSize);
+            dataSourceTransactionManager.commit(transactionStatus);
+            log.error("MyBatis - 异步批量删除成功");
+        } catch (Exception e) {
+            dataSourceTransactionManager.rollback(transactionStatus);
+            log.error("MyBatis - 异步批量删除失败 - 操作回滚", e);
+        }
     }
 
     /**
@@ -117,6 +143,14 @@ public class MyBatisBatchOption<T> {
      */
     @Async
     public void asyncBatchUpdate(IService<T> service, List<T> records, int batchSize) {
-        batchUpdate(service, records, batchSize);
+        TransactionStatus transactionStatus = dataSourceTransactionManager.getTransaction(transactionDefinition);
+        try {
+            batchUpdate(service, records, batchSize);
+            dataSourceTransactionManager.commit(transactionStatus);
+            log.error("MyBatis - 异步批量更新成功");
+        } catch (Exception e) {
+            dataSourceTransactionManager.rollback(transactionStatus);
+            log.error("MyBatis - 异步批量更新失败 - 操作回滚", e);
+        }
     }
 }
