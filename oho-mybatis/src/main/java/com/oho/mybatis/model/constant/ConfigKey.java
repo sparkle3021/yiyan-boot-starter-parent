@@ -22,4 +22,9 @@ public class ConfigKey {
      * 单次插入数据量
      */
     public static final int ONCE_INSERT_RECORDS = 2000;
+
+    /**
+     * 批量插入线程数
+     */
+    public static final int MAX_BATCH_THREAD_SIZE = 20;
 }
