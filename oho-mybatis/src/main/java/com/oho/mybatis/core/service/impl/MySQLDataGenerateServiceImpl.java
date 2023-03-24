@@ -1,13 +1,12 @@
 package com.oho.mybatis.core.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
-import com.oho.common.enums.YesNoEnum;
 import com.oho.mybatis.core.mapper.MySQLDataGenerateMapper;
 import com.oho.mybatis.core.service.MySQLDataGenerateService;
 import com.oho.mybatis.core.utils.DataGenerators;
 import com.oho.mybatis.model.constant.DateFormatPattern;
+import com.oho.mybatis.model.generator.Columns;
+import com.oho.mybatis.model.generator.Tables;
 import com.oho.mybatis.model.generator.qo.ColumnInfoDTO;
 import com.oho.mybatis.model.generator.qo.TableInfoDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,16 @@ public class MySQLDataGenerateServiceImpl implements MySQLDataGenerateService {
 
     @Autowired
     private MySQLDataGenerateMapper mySQLDataGenerateMapper;
+
+    @Override
+    public List<Tables> selectAllTableInfo() {
+        return mySQLDataGenerateMapper.selectAllTableInfo();
+    }
+
+    @Override
+    public List<Columns> selectColumnsByTableName(String tableName) {
+        return mySQLDataGenerateMapper.selectColumnsByTableName(tableName);
+    }
 
     @Override
     public Object dataReturn(String dataType, Integer length) {
@@ -120,25 +131,32 @@ public class MySQLDataGenerateServiceImpl implements MySQLDataGenerateService {
         }
     }
 
-
-    private void dataGenerate(String tableName, List<ColumnInfoDTO> columnsInfo, Integer records) {
-        List<String> columnName = columnsInfo.stream().map(ColumnInfoDTO::getColumnName).collect(Collectors.toList());
-        JSONArray jsonArray = new JSONArray(records);
+    private void dataGenerate(String tableName, List<ColumnInfoDTO> columnInfoList, Integer records) {
+        Map<ColumnInfoDTO, String> columnsInfo = new HashMap<>(columnInfoList.size());
+        for (ColumnInfoDTO columnInfo : columnInfoList) {
+            if ("auto_increment".equals(columnInfo.getExtra())) {
+                continue;
+            }
+            columnsInfo.put(columnInfo, columnInfo.getDataType());
+        }
+        List<ColumnInfoDTO> columns = new ArrayList<>(columnsInfo.keySet());
+        List<String> columnName = columns.stream().map(ColumnInfoDTO::getColumnName).collect(Collectors.toList());
+        com.alibaba.fastjson2.JSONArray jsonArray = new com.alibaba.fastjson2.JSONArray(records);
         for (int i = 0; i < records; i++) {
-            JSONObject jsonObject = new JSONObject();
-            for (ColumnInfoDTO column : columnsInfo) {
-                if (YesNoEnum.YES.getKey().equals(column.getPrimaryKey())) {
-                    jsonObject.set(column.getColumnName(), pkReturn(column.getDataType()));
+            com.alibaba.fastjson2.JSONObject jsonObject = new com.alibaba.fastjson2.JSONObject();
+            for (ColumnInfoDTO column : columns) {
+                if (column.getPrimaryKey() == 1) {
+                    jsonObject.put(column.getColumnName(), pkReturn(columnsInfo.get(column)));
                 } else {
-                    jsonObject.set(column.getColumnName(), dataReturn(column.getDataType(), column.getDataLength()));
+                    jsonObject.put(column.getColumnName(), dataReturn(columnsInfo.get(column), column.getDataLength()));
                 }
             }
             jsonArray.add(jsonObject);
         }
 
-        List data = new ArrayList<>();
+        List<Map<String, Object>> data = new ArrayList<>();
         if (jsonArray.size() > 0) {
-            data = jsonArray;
+            data = (List) jsonArray;
         }
         mySQLDataGenerateMapper.insertData(tableName, columnName, data);
     }

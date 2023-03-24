@@ -1,7 +1,10 @@
 package com.oho.mybatis.core.service;
 
+import com.oho.mybatis.model.generator.Columns;
+import com.oho.mybatis.model.generator.Tables;
 import com.oho.mybatis.model.generator.qo.ColumnInfoDTO;
 import com.oho.mybatis.model.generator.qo.TableInfoDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,6 +15,21 @@ import java.util.List;
  * @createDate 2023 /03/21
  */
 public interface MySQLDataGenerateService {
+
+    /**
+     * 查询数据库所有表信息
+     *
+     * @return List<TablesDO> list
+     */
+    List<Tables> selectAllTableInfo();
+
+    /**
+     * 查询表的所有字段信息
+     *
+     * @param tableName 表名
+     * @return List<ColumnsDO> list
+     */
+    List<Columns> selectColumnsByTableName(@Param("tableName") String tableName);
 
     /**
      * 生成随机数据

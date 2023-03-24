@@ -29,4 +29,9 @@ public class ColumnInfoDTO {
      * 数据长度
      */
     private Integer dataLength;
+
+    /**
+     * 逐渐策略，如果为自增则在生产数据时忽略该列。
+     */
+    private String extra;
 }

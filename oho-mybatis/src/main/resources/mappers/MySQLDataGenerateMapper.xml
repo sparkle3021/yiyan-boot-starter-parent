@@ -41,10 +41,11 @@
     </select>
 
 
+    <!-- 测试数据生产方法，$为动态插入变量请勿修改 -->
     <insert id="insertData">
         insert into ${tableName}
         <foreach collection="columns" item="column" open="(" close=")" separator=",">
-            #{column}
+            ${column}
         </foreach>
         values
         <foreach collection="data" item="map" separator=",">
@@ -56,7 +57,7 @@
         </foreach>
         ON DUPLICATE KEY UPDATE
         <foreach collection="columns" item="column" separator=",">
-            #{column} = VALUES(#{column})
+            ${column} = VALUES(${column})
         </foreach>
     </insert>
 </mapper>
