@@ -1,7 +1,9 @@
 package com.oho.common.utils;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
+import com.oho.common.constant.BizConstant;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,55 +23,103 @@ import java.util.Map;
  */
 @Slf4j
 @Getter
-public class JwtTokenUtil {
+public class JWTUtil {
 
-    private static volatile JwtTokenUtil jwtTokenUtil;
+    private static volatile JWTUtil jwtUtil;
+    /**
+     * Token 过期时间，默认7200s
+     */
+    private long tokenExpire = BizConstant.DEFAULT_TOKEN_EXPIRE;
+    /**
+     * 刷新Token过期时间，默认7天，
+     */
+    private long refreshTokenExpire = BizConstant.DEFAULT_TOKEN_REFRESH_EXPIRE;
+    /**
+     * 密钥
+     */
+    private String secret = String.valueOf(UUID.fastUUID());
 
-    private JwtTokenUtil() {
+    private JWTUtil() {
     }
 
-    private JwtTokenUtil(long tokenExpire, long refreshTokenExpire, String secret) {
+    private JWTUtil(String secret) {
+        this.secret = secret;
+    }
+
+    private JWTUtil(long tokenExpire) {
+        this.tokenExpire = tokenExpire;
+    }
+
+    private JWTUtil(long tokenExpire, long refreshTokenExpire) {
+        this.tokenExpire = tokenExpire;
+        this.refreshTokenExpire = refreshTokenExpire;
+    }
+
+    private JWTUtil(long tokenExpire, String secret) {
+        this.tokenExpire = tokenExpire;
+        this.secret = secret;
+    }
+
+    private JWTUtil(long tokenExpire, long refreshTokenExpire, String secret) {
         this.tokenExpire = tokenExpire;
         this.refreshTokenExpire = refreshTokenExpire;
         this.secret = secret;
     }
 
-    public static JwtTokenUtil getInstance() {
-        if (jwtTokenUtil == null) {
-            synchronized (JwtTokenUtil.class) {
-                if (jwtTokenUtil == null) {
-                    jwtTokenUtil = new JwtTokenUtil();
+    public static JWTUtil getInstance() {
+        if (jwtUtil == null) {
+            synchronized (JWTUtil.class) {
+                if (jwtUtil == null) {
+                    jwtUtil = new JWTUtil();
                 }
             }
         }
-        return jwtTokenUtil;
+        return jwtUtil;
     }
 
-    public static JwtTokenUtil getInstance(long tokenExpire, long refreshTokenExpire, String secret) {
-        if (jwtTokenUtil == null) {
-            synchronized (JwtTokenUtil.class) {
-                if (jwtTokenUtil == null) {
-                    jwtTokenUtil = new JwtTokenUtil(tokenExpire, refreshTokenExpire, secret);
+    public static JWTUtil getInstance(String secret) {
+        if (jwtUtil == null) {
+            synchronized (JWTUtil.class) {
+                if (jwtUtil == null) {
+                    jwtUtil = new JWTUtil(secret);
                 }
             }
         }
-        return jwtTokenUtil;
+        return jwtUtil;
     }
 
-    /**
-     * Token 过期时间，默认7200s
-     */
-    private long tokenExpire = 7200;
+    public static JWTUtil getInstance(long tokenExpire) {
+        if (jwtUtil == null) {
+            synchronized (JWTUtil.class) {
+                if (jwtUtil == null) {
+                    jwtUtil = new JWTUtil(tokenExpire);
+                }
+            }
+        }
+        return jwtUtil;
+    }
 
-    /**
-     * 刷新Token过期时间，默认7天，
-     */
-    private long refreshTokenExpire = 604800;
+    public static JWTUtil getInstance(long tokenExpire, long refreshTokenExpire) {
+        if (jwtUtil == null) {
+            synchronized (JWTUtil.class) {
+                if (jwtUtil == null) {
+                    jwtUtil = new JWTUtil(tokenExpire, refreshTokenExpire);
+                }
+            }
+        }
+        return jwtUtil;
+    }
 
-    /**
-     * 密钥
-     */
-    private String secret = "70bb34ea1aa6466b";
+    public static JWTUtil getInstance(long tokenExpire, long refreshTokenExpire, String secret) {
+        if (jwtUtil == null) {
+            synchronized (JWTUtil.class) {
+                if (jwtUtil == null) {
+                    jwtUtil = new JWTUtil(tokenExpire, refreshTokenExpire, secret);
+                }
+            }
+        }
+        return jwtUtil;
+    }
 
 
     /**
