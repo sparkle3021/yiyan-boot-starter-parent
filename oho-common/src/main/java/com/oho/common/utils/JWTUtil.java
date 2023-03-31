@@ -196,16 +196,14 @@ public class JWTUtil {
     }
 
     /**
-     * Token validity seconds long.
+     * Token 剩余有效时间.
      *
      * @param token the token
      * @return the long
      */
-    public long tokenValiditySeconds(String token) {
+    public Long tokenValiditySeconds(String token) {
         Date expiredDateFromToken = getExpiredDateFromToken(token);
-        long l = System.currentTimeMillis() - expiredDateFromToken.getTime();
-
-        return System.currentTimeMillis() - expiredDateFromToken.getTime();
+        return expiredDateFromToken.getTime() - System.currentTimeMillis();
     }
 
     /**
