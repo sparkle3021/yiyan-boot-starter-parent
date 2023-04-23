@@ -3,7 +3,6 @@ package com.oho.mybatis.core.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
  * @author MENGJIAO
  */
 @Slf4j
-@Component
 public class BaseMetaObjectHandler implements MetaObjectHandler {
 
     @Override

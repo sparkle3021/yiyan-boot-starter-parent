@@ -2,6 +2,7 @@ package com.oho.common.exception;
 
 
 import com.oho.common.enums.ErrorCodeEnum;
+import com.oho.common.enums.ErrorCodeEnumFormat;
 
 /**
  * 断言处理类，用于抛出各种API异常
@@ -24,14 +25,14 @@ public class Asserts {
      *
      * @param errorCode the error code
      */
-    public static void fail(ErrorCodeEnum errorCode) {
+    public static void fail(ErrorCodeEnumFormat errorCode) {
         throw new BizException(errorCode);
     }
 
     /**
      * Fail.
      */
-    public static void fail(ErrorCodeEnum errorCode, String message) {
+    public static void fail(ErrorCodeEnumFormat errorCode, String message) {
         throw new BizException(errorCode, message);
     }
 

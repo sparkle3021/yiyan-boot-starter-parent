@@ -11,7 +11,7 @@ import java.util.Objects;
  * 只有中国的数据绝大部分精确到了城市，其他国家部分数据只能定位到国家，后前的选项全部是0。
  *
  * @author Sparkler
- * @createDate 2023 /2/23-14:26
+ * @createDate 2023-2-23 14:26
  */
 @Slf4j
 public class Ip2RegionUtils {

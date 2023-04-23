@@ -28,10 +28,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Nullable;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * ElasticSearch 工具类
@@ -56,8 +53,143 @@ public class ElasticSearchUtil {
         this.elasticsearchRestTemplate = elasticsearchRestTemplate;
     }
 
+    // =================================== 插入或更新数据 ===================================
 
-    // ----------------------------------------------------------------------- 公用方法
+    /**
+     * 插入单条数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the string
+     */
+    public <T> T saveOrUpdate(T data) {
+        return elasticsearchRestTemplate.save(data, getIndexCoordinates(data.getClass()));
+    }
+
+    /**
+     * 批量插入数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the list
+     */
+    public <T> Integer saveOrUpdate(Collection<T> data) {
+        elasticsearchRestTemplate.save(data);
+        return data.size();
+    }
+
+    /**
+     * 批量插入数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the list
+     */
+    public <T> Integer saveOrUpdate(T[] data) {
+        return saveOrUpdate(Arrays.asList(data));
+    }
+
+    /**
+     * 批量插入数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the list
+     */
+    public <T> Integer saveOrUpdate(Iterator<T> data) {
+        ArrayList<T> collect = new ArrayList<>();
+        data.forEachRemaining(collect::add);
+        return saveOrUpdate(collect);
+    }
+
+    // =================================== 更新数据 ===================================
+
+    /**
+     * 更新单条数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the string
+     */
+    public <T> T update(T data) {
+        return elasticsearchRestTemplate.save(data, getIndexCoordinates(data.getClass()));
+    }
+
+    // =================================== 删除数据 ===================================
+
+    /**
+     * 删除单条数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the string
+     */
+    public <T> String delete(T data) {
+        return elasticsearchRestTemplate.delete(data);
+    }
+
+    /**
+     * 批量删除数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the list
+     */
+    public <T> Integer delete(Collection<T> data) {
+        data.forEach(this::delete);
+        return data.size();
+    }
+
+    /**
+     * 批量删除数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the list
+     */
+    public <T> Integer delete(T[] data) {
+        return delete(Arrays.asList(data));
+    }
+
+    /**
+     * 批量删除数据
+     *
+     * @param <T>  the type parameter
+     * @param data the data
+     * @return the list
+     */
+    public <T> Integer delete(Iterator<T> data) {
+        ArrayList<T> collect = new ArrayList<>();
+        data.forEachRemaining(collect::add);
+        return delete(collect);
+    }
+
+    /**
+     * 根据id删除数据
+     *
+     * @param <T>   the type parameter
+     * @param id    the id
+     * @param clazz the clazz
+     * @return the string
+     */
+    public <T> String delete(Object id, Class<T> clazz) {
+        return elasticsearchRestTemplate.delete(String.valueOf(id), clazz);
+    }
+
+    /**
+     * 根据id批量删除数据
+     *
+     * @param <T>   the type parameter
+     * @param ids   the ids
+     * @param clazz the clazz
+     * @return the string
+     */
+    public <T> Integer delete(Collection<Object> ids, Class<T> clazz) {
+        ids.forEach(id -> delete(String.valueOf(id), clazz));
+        return ids.size();
+    }
+
+    // =================================== 查询 ===================================
 
     /**
      * 拼接高亮条件
@@ -304,120 +436,6 @@ public class ElasticSearchUtil {
         return new EsResult<>(search);
     }
 
-    // ------------------------------------------------------------------------------ 索引操作方法
-
-    /**
-     * 创建索引
-     *
-     * @param index the index
-     * @return boolean 是否成功
-     */
-    public boolean createIndex(Class<?> index) {
-        if (indexExist(index)) {
-            return Boolean.FALSE;
-        }
-        return elasticsearchRestTemplate.indexOps(index).create();
-    }
-
-    /**
-     * 创建索引
-     *
-     * @param index the index
-     * @return boolean 是否成功
-     */
-    public boolean createIndex(String index) {
-        IndexCoordinates indexCoordinates = getIndexCoordinates(index);
-        if (indexExist(indexCoordinates)) {
-            return Boolean.FALSE;
-        }
-        return elasticsearchRestTemplate.indexOps(indexCoordinates).create();
-    }
-
-    /**
-     * 删除索引
-     *
-     * @param index the index
-     * @return boolean 是否成功
-     */
-    public boolean deleteIndex(Class<?> index) {
-        return elasticsearchRestTemplate.indexOps(index).delete();
-    }
-
-    /**
-     * 删除索引
-     *
-     * @param index the index
-     * @return boolean 是否成功
-     */
-    public boolean deleteIndex(String index) {
-        return elasticsearchRestTemplate.indexOps(getIndexCoordinates(index)).delete();
-    }
-
-    /**
-     * 判断索引是否存在
-     *
-     * @param index the index
-     * @return boolean 是否存在
-     */
-    public Boolean indexExist(Class<?> index) {
-        return elasticsearchRestTemplate.indexOps(index).exists();
-    }
-
-    /**
-     * 判断索引是否存在
-     *
-     * @param index the index
-     * @return boolean 是否存在
-     */
-    public Boolean indexExist(IndexCoordinates index) {
-        return elasticsearchRestTemplate.indexOps(index).exists();
-    }
-
-    /**
-     * 获取索引封装对象
-     *
-     * @param clazz the clazz
-     * @return the index coordinates
-     */
-    public IndexCoordinates getIndexCoordinates(Class<?> clazz) {
-        return elasticsearchRestTemplate.getIndexCoordinatesFor(clazz);
-    }
-
-    /**
-     * 获取索引封装对象
-     *
-     * @param indexName the index name
-     * @return the index coordinates
-     */
-    public IndexCoordinates getIndexCoordinates(String indexName) {
-        return IndexCoordinates.of(indexName);
-    }
-
-    // ------------------------------------------------------------------------------ 数据插入方法
-
-    /**
-     * 插入单条数据
-     *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the string
-     */
-    public <T> T insert(T data) {
-        return elasticsearchRestTemplate.save(data, getIndexCoordinates(data.getClass()));
-    }
-
-    /**
-     * 插入多条数据
-     *
-     * @param <T>      the type parameter
-     * @param dataList the data
-     * @return the integer
-     */
-    public <T> Integer insert(List<T> dataList) {
-        elasticsearchRestTemplate.save(dataList);
-        return dataList.size();
-    }
-
     // ------------------------------------------------------------------------------ 数据查询方法
 
     /**
@@ -600,5 +618,95 @@ public class ElasticSearchUtil {
         commonQueryCondition(searchParam, nativeSearchQueryBuilder);
         return searchResult(clazz, nativeSearchQueryBuilder);
     }
+
+    // =================================================================== 索引操作 ===================================================================
+
+    /**
+     * 创建索引
+     *
+     * @param index the index
+     * @return boolean 是否成功
+     */
+    public boolean createIndex(Class<?> index) {
+        if (indexExist(index)) {
+            return Boolean.FALSE;
+        }
+        return elasticsearchRestTemplate.indexOps(index).create();
+    }
+
+    /**
+     * 创建索引
+     *
+     * @param index the index
+     * @return boolean 是否成功
+     */
+    public boolean createIndex(String index) {
+        IndexCoordinates indexCoordinates = getIndexCoordinates(index);
+        if (indexExist(indexCoordinates)) {
+            return Boolean.FALSE;
+        }
+        return elasticsearchRestTemplate.indexOps(indexCoordinates).create();
+    }
+
+    /**
+     * 删除索引
+     *
+     * @param index the index
+     * @return boolean 是否成功
+     */
+    public boolean deleteIndex(Class<?> index) {
+        return elasticsearchRestTemplate.indexOps(index).delete();
+    }
+
+    /**
+     * 删除索引
+     *
+     * @param index the index
+     * @return boolean 是否成功
+     */
+    public boolean deleteIndex(String index) {
+        return elasticsearchRestTemplate.indexOps(getIndexCoordinates(index)).delete();
+    }
+
+    /**
+     * 判断索引是否存在
+     *
+     * @param index the index
+     * @return boolean 是否存在
+     */
+    public Boolean indexExist(Class<?> index) {
+        return elasticsearchRestTemplate.indexOps(index).exists();
+    }
+
+    /**
+     * 判断索引是否存在
+     *
+     * @param index the index
+     * @return boolean 是否存在
+     */
+    public Boolean indexExist(IndexCoordinates index) {
+        return elasticsearchRestTemplate.indexOps(index).exists();
+    }
+
+    /**
+     * 获取索引封装对象
+     *
+     * @param clazz the clazz
+     * @return the index coordinates
+     */
+    public IndexCoordinates getIndexCoordinates(Class<?> clazz) {
+        return elasticsearchRestTemplate.getIndexCoordinatesFor(clazz);
+    }
+
+    /**
+     * 获取索引封装对象
+     *
+     * @param indexName the index name
+     * @return the index coordinates
+     */
+    public IndexCoordinates getIndexCoordinates(String indexName) {
+        return IndexCoordinates.of(indexName);
+    }
+
 
 }

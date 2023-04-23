@@ -9,7 +9,7 @@ import lombok.Getter;
  * @createDate 2022 /11/9
  */
 @Getter
-public enum ErrorCodeEnum {
+public enum ErrorCodeEnum implements ErrorCodeEnumFormat {
     /**
      * 操作成功
      */
@@ -90,7 +90,7 @@ public enum ErrorCodeEnum {
      *
      * @return the result code
      */
-    public String getResultCode() {
+    public String getCode() {
         return this.code;
     }
 
@@ -99,7 +99,7 @@ public enum ErrorCodeEnum {
      *
      * @return the result message
      */
-    public String getResultMessage() {
+    public String getMessage() {
         return this.message;
     }
 }

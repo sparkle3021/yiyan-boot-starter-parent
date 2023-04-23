@@ -21,4 +21,9 @@ public class BizConstant {
      * 默认刷新Token过期时间，30天
      */
     public static final int DEFAULT_TOKEN_REFRESH_EXPIRE = 2592000;
+
+    /**
+     * 默认加密密钥
+     */
+    public static final String DEFAULT_SECRET = "is_app_default_secret";
 }

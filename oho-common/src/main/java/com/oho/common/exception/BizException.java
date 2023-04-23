@@ -1,6 +1,6 @@
 package com.oho.common.exception;
 
-import com.oho.common.enums.ErrorCodeEnum;
+import com.oho.common.enums.ErrorCodeEnumFormat;
 
 /**
  * 自定义异常类
@@ -24,22 +24,22 @@ public class BizException extends RuntimeException {
         super();
     }
 
-    public BizException(ErrorCodeEnum errorInfoInterface) {
-        super(errorInfoInterface.getResultCode());
-        this.errorCode = errorInfoInterface.getResultCode();
-        this.errorMsg = errorInfoInterface.getResultMessage();
+    public BizException(ErrorCodeEnumFormat errorInfoInterface) {
+        super(errorInfoInterface.getCode());
+        this.errorCode = errorInfoInterface.getCode();
+        this.errorMsg = errorInfoInterface.getMessage();
     }
 
-    public BizException(ErrorCodeEnum errorInfoInterface, String message) {
-        super(errorInfoInterface.getResultCode());
-        this.errorCode = errorInfoInterface.getResultCode();
-        this.errorMsg = errorInfoInterface.getResultMessage() + " : " + message;
+    public BizException(ErrorCodeEnumFormat errorInfoInterface, String message) {
+        super(errorInfoInterface.getCode());
+        this.errorCode = errorInfoInterface.getCode();
+        this.errorMsg = errorInfoInterface.getMessage() + " : " + message;
     }
 
-    public BizException(ErrorCodeEnum errorInfoInterface, Throwable cause) {
-        super(errorInfoInterface.getResultCode(), cause);
-        this.errorCode = errorInfoInterface.getResultCode();
-        this.errorMsg = errorInfoInterface.getResultMessage();
+    public BizException(ErrorCodeEnumFormat errorInfoInterface, Throwable cause) {
+        super(errorInfoInterface.getCode(), cause);
+        this.errorCode = errorInfoInterface.getCode();
+        this.errorMsg = errorInfoInterface.getMessage();
     }
 
     public BizException(String errorMsg) {

@@ -1,7 +1,6 @@
 package com.oho.common.utils;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.oho.common.constant.BizConstant;
 import io.jsonwebtoken.Claims;
@@ -37,7 +36,7 @@ public class JWTUtil {
     /**
      * 密钥
      */
-    private String secret = String.valueOf(UUID.fastUUID());
+    private String secret = BizConstant.DEFAULT_SECRET;
 
     private JWTUtil() {
     }
