@@ -2,18 +2,20 @@ package com.oho.common.utils.http;
 
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
 
 
 /**
- * OKHttp工具类
+ * OKHttp3工具类
  *
  * @author MENGJIAO
  * @createDate 2023-04-23 16:48
  */
-public class OkHttpUtil {
+@Component
+public class OkHttp3Util {
 
     private final OkHttpClient client;
     /**
@@ -21,7 +23,7 @@ public class OkHttpUtil {
      */
     private final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
 
-    public OkHttpUtil() {
+    public OkHttp3Util() {
         client = new OkHttpClient();
     }
 

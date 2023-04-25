@@ -13,6 +13,8 @@ import java.util.function.Supplier;
  */
 public class BeanUtils extends org.springframework.beans.BeanUtils {
 
+    private BeanUtils() {
+    }
 
     /**
      * 简单属性拷贝
@@ -41,7 +43,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      */
     public static <S, T> T copyProperties(S source, Class<T> targetClass) {
         String sourceJson = JsonUtils.toJson(source);
-        return JsonUtils.toBean(sourceJson, targetClass);
+        return JsonUtils.toObj(sourceJson, targetClass);
     }
 
     /**
@@ -119,10 +121,10 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
         void callBack(S s, T t);
     }
 
-    public static <T> boolean fieldInClass(String fieldName,Class<T> clazz){
-        Field[] fields=clazz.getDeclaredFields();
-        for(Field field:fields){
-            if(field.getName().equals(fieldName)){
+    public static <T> boolean fieldInClass(String fieldName, Class<T> clazz) {
+        Field[] fields = clazz.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getName().equals(fieldName)) {
                 return true;
             }
         }
