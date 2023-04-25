@@ -74,6 +74,18 @@
         </dependency>
         <!-- Test End -->
 
+        <!-- 缓存 Start -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <!-- 缓存 End -->
+
         <!-- Other Tools Starter -->
         <dependency>
             <groupId>com.alibaba</groupId>
