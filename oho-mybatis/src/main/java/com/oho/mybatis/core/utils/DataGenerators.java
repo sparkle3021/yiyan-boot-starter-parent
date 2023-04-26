@@ -5,7 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.oho.mybatis.model.constant.ConfigKey;
+import com.oho.mybatis.core.model.constant.ConfigKey;
 
 import java.math.BigDecimal;
 import java.time.Instant;

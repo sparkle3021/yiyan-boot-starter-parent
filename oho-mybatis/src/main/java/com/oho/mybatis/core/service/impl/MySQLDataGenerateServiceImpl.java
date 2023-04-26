@@ -3,13 +3,13 @@ package com.oho.mybatis.core.service.impl;
 import cn.hutool.core.date.DateUtil;
 import com.oho.common.utils.ObjectUtils;
 import com.oho.mybatis.core.mapper.MySQLDataGenerateMapper;
+import com.oho.mybatis.core.model.constant.ConfigKey;
+import com.oho.mybatis.core.model.constant.DateFormatPattern;
+import com.oho.mybatis.core.model.generator.Columns;
+import com.oho.mybatis.core.model.generator.Tables;
+import com.oho.mybatis.core.model.generator.qo.ColumnInfoDTO;
 import com.oho.mybatis.core.service.MySQLDataGenerateService;
 import com.oho.mybatis.core.utils.DataGenerators;
-import com.oho.mybatis.model.constant.ConfigKey;
-import com.oho.mybatis.model.constant.DateFormatPattern;
-import com.oho.mybatis.model.generator.Columns;
-import com.oho.mybatis.model.generator.Tables;
-import com.oho.mybatis.model.generator.qo.ColumnInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
-import static com.oho.mybatis.model.constant.MySQLDataType.*;
+import static com.oho.mybatis.core.model.constant.MySQLDataType.*;
 
 @Slf4j
 @Service

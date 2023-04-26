@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.oho.payment.alipay.config.AlipayAutoConfiguration
+    com.oho.payment.alipay.autoconfigure.AlipayAutoConfiguration

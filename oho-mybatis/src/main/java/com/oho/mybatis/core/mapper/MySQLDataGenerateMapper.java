@@ -1,7 +1,7 @@
 package com.oho.mybatis.core.mapper;
 
-import com.oho.mybatis.model.generator.Columns;
-import com.oho.mybatis.model.generator.Tables;
+import com.oho.mybatis.core.model.generator.Columns;
+import com.oho.mybatis.core.model.generator.Tables;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,6 +1,6 @@
 package com.oho.mybatis.core.config;
 
-import com.oho.mybatis.model.constant.ConfigKey;
+import com.oho.mybatis.core.model.constant.ConfigKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
