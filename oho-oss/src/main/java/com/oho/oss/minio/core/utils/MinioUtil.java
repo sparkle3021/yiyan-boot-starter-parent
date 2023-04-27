@@ -1,12 +1,12 @@
-package com.oho.minio.core.utils;
+package com.oho.oss.minio.core.utils;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import com.oho.common.utils.CollectionUtils;
 import com.oho.common.utils.StringUtils;
 import com.oho.common.utils.ValidationUtils;
-import com.oho.minio.autuconfigure.properties.MinioProperties;
-import com.oho.minio.autuconfigure.properties.NginxProperties;
+import com.oho.oss.minio.autoconfigure.properties.MinioProperties;
+import com.oho.oss.minio.autoconfigure.properties.NginxProperties;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;

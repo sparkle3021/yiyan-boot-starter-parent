@@ -1,4 +1,4 @@
-package com.oho.minio.autuconfigure.properties;
+package com.oho.oss.minio.autoconfigure.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -10,9 +10,10 @@ import org.springframework.context.annotation.Configuration;
  * @author Sparkler
  */
 @Data
-@ConfigurationProperties(prefix = "minio")
+@ConfigurationProperties(prefix = "oss.minio")
 @Configuration
 public class MinioProperties {
+    private boolean enable = false;
     /**
      * ip
      */

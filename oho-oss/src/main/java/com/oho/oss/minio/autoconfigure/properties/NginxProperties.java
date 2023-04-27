@@ -1,4 +1,4 @@
-package com.oho.minio.autuconfigure.properties;
+package com.oho.oss.minio.autoconfigure.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "nginx")
+@ConfigurationProperties(prefix = "oss.minio.nginx")
 public class NginxProperties {
 
     /**

@@ -1,6 +1,6 @@
-package com.oho.minio.autuconfigure;
+package com.oho.oss.minio.autoconfigure;
 
-import com.oho.minio.autuconfigure.properties.MinioProperties;
+import com.oho.oss.minio.autoconfigure.properties.MinioProperties;
 import io.minio.MinioClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Slf4j
 @Configuration
-@ConditionalOnProperty(value = "minio.endpoint")
+@ConditionalOnProperty(value = "oss.minio.enable", havingValue = "true")
 @EnableConfigurationProperties(MinioProperties.class)
 public class MinioAutoConfiguration {
 

@@ -69,7 +69,6 @@
         <module>../oho-quartz</module>
         <module>../oho-rocketmq</module>
         <module>../oho-payment</module>
-        <module>../oho-minio</module>
         <module>../oho-elasticsearch</module>
         <module>../oho-mail</module>
         <module>../oho-mybatis</module>
@@ -129,23 +128,23 @@
             </dependency>
             <dependency>
                 <groupId>com.oho</groupId>
-                <artifactId>oho-minio</artifactId>
-                <version>1.0</version>
-            </dependency>
-            <dependency>
-                <groupId>com.oho</groupId>
                 <artifactId>oho-redis</artifactId>
-                <version>1.0</version>
+                <version>${oho-module.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.oho</groupId>
                 <artifactId>oho-rocketmq</artifactId>
-                <version>1.0</version>
+                <version>${oho-module.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.oho</groupId>
                 <artifactId>oho-mybatis</artifactId>
-                <version>1.0</version>
+                <version>${oho-module.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.oho</groupId>
+                <artifactId>oho-oss</artifactId>
+                <version>${oho-module.version}</version>
             </dependency>
             <!-- OHO 模块 -->
 

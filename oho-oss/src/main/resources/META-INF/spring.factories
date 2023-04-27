@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.oho.oss.aliyun.autoconfigure.AliyunOssAutoConfiguration, \
+    com.oho.oss.qiniu.autoconfigure.QiniuOssAutoConfiguration, \
+    com.oho.oss.minio.autoconfigure.MinioAutoConfiguration
