@@ -124,4 +124,11 @@ public class DateUtils {
     public static long currentTimeMillis() {
         return System.currentTimeMillis();
     }
+
+    /**
+     * LocalDateTime转换为Date
+     */
+    public static java.util.Date toDate(LocalDateTime localDateTime) {
+        return java.util.Date.from(localDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant());
+    }
 }
