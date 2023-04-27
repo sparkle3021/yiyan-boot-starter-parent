@@ -8,7 +8,7 @@
 oho-boot-module
 │          
 ├─oho-common		# 公共模块
-|
+│ 
 ├─oho-dependencies	# 依赖版本管理
 │      
 ├─oho-elasticsearch	# elasticsearch工具模块
@@ -27,3 +27,8 @@ oho-boot-module
 │                          
 └─oho-rocketmq		# RocketMQ工具模块
 ```
+
+## TODO
+
+* 各模块添加测试代码
+* 各模块添加使用文档
