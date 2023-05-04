@@ -32,8 +32,6 @@
         <!-- ElasticSearch  -->
         <elasticsearch.version>7.17.3</elasticsearch.version>
         <elasticsearch-rest-high-level-client.version>7.17.3</elasticsearch-rest-high-level-client.version>
-        <!-- 存储 -->
-        <minio.version>8.2.1</minio.version>
         <!-- Redis -->
         <redisson.version>3.19.0</redisson.version>
         <!-- 支付 -->
@@ -43,7 +41,10 @@
         <rocketmq-spring-boot-starter>2.2.2</rocketmq-spring-boot-starter>
         <!-- HTTP 工具 -->
         <okhttp.version>4.9.3</okhttp.version>
-        <!-- 云厂商 OSS -->
+        <!-- 邮件服务 -->
+        <aliyun-sdk-dm.version>1.0.4</aliyun-sdk-dm.version>
+        <!-- OSS -->
+        <minio.version>8.2.1</minio.version>
         <aliyun-sdk-oss.version>3.15.1</aliyun-sdk-oss.version>
         <qiniu-java-sdk.version>7.7.0</qiniu-java-sdk.version>
         <!-- 常用开发工具 -->
@@ -206,7 +207,7 @@
             </dependency>
             <!-- MinIO End -->
 
-            <!-- 云厂商 OSS -->
+            <!-- OSS -->
             <dependency>
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
@@ -216,6 +217,13 @@
                 <groupId>com.qiniu</groupId>
                 <artifactId>qiniu-java-sdk</artifactId>
                 <version>${qiniu-java-sdk.version}</version>
+            </dependency>
+
+            <!-- Email -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>dm20151123</artifactId>
+                <version>${aliyun-sdk-dm.version}</version>
             </dependency>
 
             <!-- Other Tools Starter -->

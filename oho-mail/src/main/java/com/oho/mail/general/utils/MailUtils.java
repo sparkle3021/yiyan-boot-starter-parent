@@ -1,10 +1,10 @@
-package com.oho.mail.core.general.utils;
+package com.oho.mail.general.utils;
 
 import com.oho.common.enums.YesNoEnum;
 import com.oho.common.exception.Asserts;
 import com.oho.common.utils.CollectionUtils;
 import com.oho.common.utils.StringUtils;
-import com.oho.mail.core.general.model.MailContent;
+import com.oho.mail.general.model.MailContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,10 +93,9 @@ public class MailUtils {
                     multipartMessage.addAttachment(attachmentFile.getName(), attachmentFile);
                 }
             }
-
             mailSender.send(message);
         } catch (Exception e) {
-            log.error("邮件发送失败 ： [{}] - [{}]", e.getMessage(), e);
+            log.error("邮件发送失败 ： [{}] - [{}]", e.getMessage(), e.getLocalizedMessage());
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
