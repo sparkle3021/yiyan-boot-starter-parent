@@ -17,20 +17,20 @@ import java.util.concurrent.TimeUnit;
  * 基于Redis Redisson 分布式锁工具类
  *
  * @author Sparkler
- * @createDate 2022 /12/21
+ * @createDate 2022-12-21
  */
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class RLockUtils {
+public class RedisLockUtil {
 
     private RedissonClient redissonClient;
 
     /**
      * 获取锁。默认使用可重入锁
      *
-     * @param lockKey key
-     * @return lock lock
+     * @param lockKey 锁key
+     * @return 锁
      */
     public RLock getLock(String lockKey) {
         return redissonClient.getLock(lockKey);
@@ -39,9 +39,9 @@ public class RLockUtils {
     /**
      * 根据传入锁类型获取锁
      *
-     * @param lockKey   the lock key
-     * @param rLockEnum the r lock enum
-     * @return the lock
+     * @param lockKey   锁key
+     * @param rLockEnum 锁类型
+     * @return 锁
      */
     public RLock getLock(String lockKey, RLockEnum... rLockEnum) {
         RLockEnum lockType = RLockEnum.ReentrantLock;
@@ -77,8 +77,8 @@ public class RLockUtils {
      * 该对象也可以用来将多个`RLock`对象关联为一个红锁，每个`RLock`对象实例可以来自于不同的Redisson实例。
      * ** 红锁在大部分节点上加锁成功就算成功。 **
      *
-     * @param locks the locks
-     * @return the r lock
+     * @param locks 锁对象
+     * @return 红锁对象
      */
     public RLock redLock(RLock... locks) {
         return new RedissonRedLock(locks);
@@ -112,9 +112,9 @@ public class RLockUtils {
     /**
      * 加锁并设置有效期
      *
-     * @param lockKey   key
+     * @param lockKey   锁key
      * @param timeout   有效时间，默认时间单位在实现类传入
-     * @param rLockEnum the r lock enum
+     * @param rLockEnum 锁类型
      */
     public void lock(String lockKey, int timeout, RLockEnum... rLockEnum) {
         RLock rLock = getLock(lockKey, rLockEnum);
@@ -124,10 +124,10 @@ public class RLockUtils {
     /**
      * 加锁并设置有效期指定时间单位
      *
-     * @param lockKey   key
+     * @param lockKey   锁key
      * @param timeout   有效时间
      * @param unit      时间单位
-     * @param rLockEnum the r lock enum
+     * @param rLockEnum 锁类型
      */
     public void lock(String lockKey, int timeout, TimeUnit unit, RLockEnum... rLockEnum) {
         RLock rLock = getLock(lockKey, rLockEnum);
@@ -137,8 +137,8 @@ public class RLockUtils {
     /**
      * 尝试获取锁，获取到则持有该锁返回true,未获取到立即返回false
      *
-     * @param lockKey   the lock key
-     * @param rLockEnum the r lock enum
+     * @param lockKey   锁key
+     * @param rLockEnum 锁类型
      * @return true -获取锁成功 false-获取锁失败
      */
     public boolean tryLock(String lockKey, RLockEnum... rLockEnum) {
@@ -166,8 +166,8 @@ public class RLockUtils {
     /**
      * 锁是否被任意一个线程锁持有
      *
-     * @param lockKey   the lock key
-     * @param rLockEnum the r lock enum
+     * @param lockKey   锁key
+     * @param rLockEnum 锁类型
      * @return true -被锁 false-未被锁
      */
     public boolean isLocked(String lockKey, RLockEnum... rLockEnum) {
