@@ -2,8 +2,8 @@ package com.oho.quartz.core.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.oho.common.utils.StringUtils;
-import com.oho.quartz.core.CronUtils;
 import com.oho.quartz.core.model.contant.ScheduleConstants;
+import com.oho.quartz.core.utils.CronUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

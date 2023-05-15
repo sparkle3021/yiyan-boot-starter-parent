@@ -14,7 +14,7 @@
         `CHECKSUM`,`CREATE_OPTIONS`,`TABLE_COMMENT`
     </sql>
 
-    <select id="selectAllTableInfo" resultType="com.oho.mybatis.model.generator.Tables">
+    <select id="selectAllTableInfo" resultType="com.oho.mybatis.core.model.generator.Tables">
         select
         <include refid="MySQL_Table_Info"/>
         from information_schema.TABLES
@@ -32,7 +32,7 @@
         `SRS_ID`
     </sql>
 
-    <select id="selectColumnsByTableName" resultType="com.oho.mybatis.model.generator.Columns">
+    <select id="selectColumnsByTableName" resultType="com.oho.mybatis.core.model.generator.Columns">
         select
         <include refid="MySQL_Column_Info"/>
         FROM information_schema.COLUMNS

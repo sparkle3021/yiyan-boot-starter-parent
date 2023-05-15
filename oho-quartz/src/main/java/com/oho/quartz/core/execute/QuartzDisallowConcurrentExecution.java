@@ -1,8 +1,8 @@
 package com.oho.quartz.core.execute;
 
-import com.oho.quartz.core.JobInvokeUtil;
 import com.oho.quartz.core.model.AbstractQuartzJob;
 import com.oho.quartz.core.model.dto.QuartzJobParam;
+import com.oho.quartz.core.utils.JobInvokeUtil;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobExecutionContext;
 

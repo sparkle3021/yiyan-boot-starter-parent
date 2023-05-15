@@ -28,9 +28,9 @@ public class Result<T> extends BaseResult {
         this.data = data;
     }
 
-    public boolean success() {
-        return CODE_SUCCESS.equals(getCode());
-    }
+//    public boolean success() {
+//        return CODE_SUCCESS.equals(getCode());
+//    }
 
     public boolean systemFail() {
         return CODE_SYSTEM_ERROR.equals(getCode());
@@ -42,6 +42,10 @@ public class Result<T> extends BaseResult {
 
     public static <T> Result<T> ok(String message) {
         return new Result<>(CODE_SUCCESS, message, null);
+    }
+
+    public static <T> Result<T> success() {
+        return new Result<>(Integer.valueOf(ErrorCodeConstant.SUCCESS.getCode()), ErrorCodeConstant.SUCCESS.getMsg(), null);
     }
 
     public static <T> Result<T> success(T data) {

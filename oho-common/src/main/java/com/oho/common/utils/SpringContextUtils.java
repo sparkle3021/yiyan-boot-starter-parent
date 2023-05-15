@@ -1,5 +1,6 @@
 package com.oho.common.utils;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -19,11 +20,14 @@ public class SpringContextUtils implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
     /**
-     * 实现ApplicationContextAware接口的回调方法。设置上下文环境
+     * 注册bean
+     *
+     * @param beanName bean名称
+     * @param bean     bean对象
      */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        SpringContextUtils.applicationContext = applicationContext;
+    public static void registerBean(String beanName, Object bean) {
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(bean);
+        applicationContext.getAutowireCapableBeanFactory().initializeBean(bean, beanName);
     }
 
     /**
@@ -65,5 +69,13 @@ public class SpringContextUtils implements ApplicationContextAware {
      */
     public String[] getProfiles() {
         return applicationContext.getEnvironment().getActiveProfiles();
+    }
+
+    /**
+     * 实现ApplicationContextAware接口的回调方法。设置上下文环境
+     */
+    @Override
+    public void setApplicationContext(@NotNull ApplicationContext applicationContext) {
+        SpringContextUtils.applicationContext = applicationContext;
     }
 }

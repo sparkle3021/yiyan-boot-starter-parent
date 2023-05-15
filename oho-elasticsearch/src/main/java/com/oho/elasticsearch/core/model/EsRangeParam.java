@@ -1,6 +1,6 @@
 package com.oho.elasticsearch.core.model;
 
-import com.oho.elasticsearch.core.model.enums.RangeEnum;
+import com.oho.elasticsearch.core.enums.RangeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

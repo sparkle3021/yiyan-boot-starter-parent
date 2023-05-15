@@ -1,8 +1,8 @@
 package com.oho.elasticsearch.core.model;
 
 
-import com.oho.elasticsearch.core.model.enums.EsBoolEnum;
-import com.oho.elasticsearch.core.model.enums.EsQueryBuilderEnum;
+import com.oho.elasticsearch.core.enums.EsBoolEnum;
+import com.oho.elasticsearch.core.enums.EsQueryBuilderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -3,6 +3,7 @@ package com.oho.common.utils;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -27,12 +28,11 @@ import java.util.*;
 /**
  * Json 工具类
  *
- * @author Sparkler
- * @createDate 2023/01/02
+ * @author MENGJIAO
+ * @createDate 2023-01-02
  */
 @Slf4j
 public class JsonUtils extends JSONUtil {
-
 
     private JsonUtils() {
     }
@@ -70,22 +70,12 @@ public class JsonUtils extends JSONUtil {
         //null的属性不进行序列化
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.registerModule(javaTimeModule);
-        // 此项必须配置，否则如果序列化的对象里边还有对象，会报错误 java.util.LinkedHashMap cannot be cast to xxx
-        /* objectMapper.activateDefaultTyping(
-                objectMapper.getPolymorphicTypeValidator(),
-                ObjectMapper.DefaultTyping.NON_FINAL,
-                JsonTypeInfo.As.PROPERTY);*/
         //是否允许使用注释
-        // objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+        objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
         //字段允许去除引号
-        // objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         //允许单引号
-        // objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        //允许转义字符
-        // objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-        //严格重复检测
-        // objectMapper.configure(JsonParser.Feature.STRICT_DUPLICATE_DETECTION, true);
-
+        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
         //不检测失败字段映射
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //时间字段输出时间戳
@@ -158,7 +148,7 @@ public class JsonUtils extends JSONUtil {
      * @param cls     the cls
      * @return t t
      */
-    public static <T> T toBean(String jsonStr, Class<T> cls) {
+    public static <T> T toObj(String jsonStr, Class<T> cls) {
         if (StringUtils.isBlank(jsonStr) || cls == null) {
             return null;
         }
@@ -169,22 +159,6 @@ public class JsonUtils extends JSONUtil {
             return null;
         }
     }
-
-//    /**
-//     * 转成list
-//     * 泛型在编译期类型被擦除导致报错
-//     *
-//     * @param <T>         the type parameter
-//     * @param listJsonStr the gson string
-//     * @param cls         the cls
-//     * @return list list
-//     */
-//    public static <T> List<T> toList(String listJsonStr, Class<T[]> cls) {
-//        if (StringUtils.isBlank(listJsonStr) || cls == null) {
-//            return null;
-//        }
-//        return Arrays.asList(Objects.requireNonNull(toBean(listJsonStr, cls)));
-//    }
 
     /**
      * 解析Map

@@ -4,7 +4,8 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.util.StringUtils;
 import com.alibaba.excel.write.metadata.WriteSheet;
-import com.oho.common.exception.ServiceException;
+import com.oho.common.exception.Asserts;
+import com.oho.common.exception.BizException;
 import com.oho.common.utils.CollectionUtils;
 import com.oho.common.utils.excel.common.ExcelFillCellMergeStrategy;
 import com.oho.common.utils.excel.common.ExcelWebConfig;
@@ -58,7 +59,7 @@ public class ExcelWrite {
             List<SheetData> sheetDataList = exportParam.getSheetDataList();
 
             if (CollectionUtils.isEmpty(sheetDataList)) {
-                throw new ServiceException("Sheet Data 为空");
+                throw new BizException("Sheet Data 为空");
             }
 
             for (SheetData sheetData : sheetDataList) {
@@ -93,7 +94,7 @@ public class ExcelWrite {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             e.printStackTrace();
-            //Asserts.fail(ResultCodeEnum.FILE_EXPORT_FAIL, e.getMessage());
+            Asserts.fail(e.getMessage());
         } finally {
             assert writer != null;
             writer.finish();

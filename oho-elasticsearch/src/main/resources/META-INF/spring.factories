@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    com.oho.elasticsearch.config.ElasticSearchAutoConfiguration
+    com.oho.elasticsearch.autoconfigure.ElasticSearchAutoConfiguration

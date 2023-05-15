@@ -1,8 +1,8 @@
 package com.oho.mybatis.core.service;
 
-import com.oho.mybatis.model.generator.Columns;
-import com.oho.mybatis.model.generator.Tables;
-import com.oho.mybatis.model.generator.qo.ColumnInfoDTO;
+import com.oho.mybatis.core.model.generator.Columns;
+import com.oho.mybatis.core.model.generator.Tables;
+import com.oho.mybatis.core.model.generator.qo.ColumnInfoDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

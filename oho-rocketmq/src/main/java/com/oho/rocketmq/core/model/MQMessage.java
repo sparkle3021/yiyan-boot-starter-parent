@@ -2,6 +2,7 @@ package com.oho.rocketmq.core.model;
 
 import com.oho.common.utils.IdUtils;
 import com.oho.common.utils.StringUtils;
+import com.oho.rocketmq.core.enums.DelayLevel;
 import lombok.Data;
 
 import java.util.List;
