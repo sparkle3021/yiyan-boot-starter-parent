@@ -1,6 +1,7 @@
 package com.oho.redis.core.config;
 
 import com.oho.common.utils.JsonUtils;
+import com.oho.redis.core.utils.RedisDistributedId;
 import com.oho.redis.core.utils.RedisUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -41,5 +42,13 @@ public class RedisTemplateConfig {
 
         template.afterPropertiesSet();
         return template;
+    }
+
+    /**
+     * 注册分布式id生成器
+     */
+    @Bean
+    public RedisDistributedId redisDistributedId() {
+        return new RedisDistributedId();
     }
 }
