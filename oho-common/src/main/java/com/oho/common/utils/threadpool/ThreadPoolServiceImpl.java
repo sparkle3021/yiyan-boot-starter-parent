@@ -1,7 +1,7 @@
 package com.oho.common.utils.threadpool;
 
 import com.alibaba.ttl.TtlRunnable;
-import com.oho.common.exception.ThreadPoolExecutorException;
+import com.oho.common.exception.BizException;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -201,7 +201,7 @@ public class ThreadPoolServiceImpl implements ThreadPoolService {
                 }
             }
             if (t != null) {
-                throw new ThreadPoolExecutorException(t);
+                throw new BizException(t.getMessage());
             }
         }
     }

@@ -2,9 +2,9 @@ package com.oho.oss.minio.core.utils;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
+import com.oho.common.exception.Asserts;
 import com.oho.common.utils.CollectionUtils;
 import com.oho.common.utils.StringUtils;
-import com.oho.common.utils.ValidationUtils;
 import com.oho.oss.minio.autoconfigure.properties.MinioProperties;
 import com.oho.oss.minio.autoconfigure.properties.NginxProperties;
 import io.minio.*;
@@ -197,8 +197,8 @@ public class MinioUtil {
      */
     @SneakyThrows
     public String putObject(String bucketName, MultipartFile multipartFile) {
-        ValidationUtils.isTrue(multipartFile.getSize() <= minioProperties.getMaxUploadFileSize(), "minio.upload.file.is.too.big");
-        ValidationUtils.isTrue(bucketExists(bucketName), "minio.bucket.is.not.exist");
+        Asserts.fail(multipartFile.getSize() <= minioProperties.getMaxUploadFileSize(), "minio.upload.file.is.too.big");
+        Asserts.fail(bucketExists(bucketName), "minio.bucket.is.not.exist");
         String objectName = this.getFileMd5(multipartFile);
         return this.putObject(bucketName, multipartFile.getInputStream(), objectName, multipartFile.getContentType());
     }
@@ -214,8 +214,8 @@ public class MinioUtil {
      */
     @SneakyThrows
     public String putObject(String bucketName, InputStream stream, String objectName, String contentType) {
-        ValidationUtils.isTrue(bucketExists(bucketName), "minio.bucket.is.not.exist");
-        ValidationUtils.isTrue(StringUtils.isNotBlank(objectName), "minio.objectName.is.not.exist");
+        Asserts.fail(bucketExists(bucketName), "minio.bucket.is.not.exist");
+        Asserts.fail(StringUtils.isNotBlank(objectName), "minio.objectName.is.not.exist");
         ObjectWriteResponse objectWriteResponse = minioClient.putObject(
                 PutObjectArgs.builder()
                         .bucket(bucketName)
@@ -303,7 +303,7 @@ public class MinioUtil {
      */
     @SneakyThrows
     public List<String> removeObject(String bucketName, List<String> objectNames) {
-        ValidationUtils.isTrue(CollectionUtils.isNotEmpty(objectNames), "minio.delete.object.name.can.not.empty");
+        Asserts.fail(CollectionUtils.isNotEmpty(objectNames), "minio.delete.object.name.can.not.empty");
         List<String> deleteErrorNames = new ArrayList<>();
         boolean flag = bucketExists(bucketName);
         if (flag) {

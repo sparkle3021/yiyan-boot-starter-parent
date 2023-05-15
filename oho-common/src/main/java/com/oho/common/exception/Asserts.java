@@ -7,8 +7,8 @@ import com.oho.common.enums.ErrorCodeEnumFormat;
 /**
  * 断言处理类，用于抛出各种API异常
  *
- * @author macro
- * @date 2020 /2/27
+ * @author MENGJIAO
+ * @createDate 2020-2-27
  */
 public class Asserts {
     /**
@@ -41,5 +41,14 @@ public class Asserts {
      */
     public static void fail() {
         throw new BizException(ErrorCodeEnum.BIZ_ERROR);
+    }
+
+    /**
+     * Fail.
+     */
+    public static void fail(boolean flag, String errorMessage) {
+        if (flag) {
+            throw new BizException(errorMessage);
+        }
     }
 }

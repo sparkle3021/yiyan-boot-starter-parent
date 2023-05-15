@@ -5,7 +5,7 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.util.StringUtils;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.oho.common.exception.Asserts;
-import com.oho.common.exception.ServiceException;
+import com.oho.common.exception.BizException;
 import com.oho.common.utils.CollectionUtils;
 import com.oho.common.utils.excel.common.ExcelFillCellMergeStrategy;
 import com.oho.common.utils.excel.common.ExcelWebConfig;
@@ -59,7 +59,7 @@ public class ExcelWrite {
             List<SheetData> sheetDataList = exportParam.getSheetDataList();
 
             if (CollectionUtils.isEmpty(sheetDataList)) {
-                throw new ServiceException("Sheet Data 为空");
+                throw new BizException("Sheet Data 为空");
             }
 
             for (SheetData sheetData : sheetDataList) {
