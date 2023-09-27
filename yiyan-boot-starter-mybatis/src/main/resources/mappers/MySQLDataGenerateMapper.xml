@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiyan.boot.mybatis.core.mapper.MySQLDataGenerateMapper">
+
+    <sql id="MySQL_Table_Info">
+        `TABLE_CATALOG`,`TABLE_SCHEMA`,`TABLE_NAME`,
+        `TABLE_TYPE`,`ENGINE`,`VERSION`,
+        `ROW_FORMAT`,`TABLE_ROWS`,`AVG_ROW_LENGTH`,
+        `DATA_LENGTH`,`MAX_DATA_LENGTH`,`INDEX_LENGTH`,
+        `DATA_FREE`,`AUTO_INCREMENT`,`CREATE_TIME`,
+        `UPDATE_TIME`,`CHECK_TIME`,`TABLE_COLLATION`,
+        `CHECKSUM`,`CREATE_OPTIONS`,`TABLE_COMMENT`
+    </sql>
+
+    <select id="selectAllTableInfo" resultType="com.yiyan.boot.mybatis.core.model.generator.Tables">
+        select
+        <include refid="MySQL_Table_Info"/>
+        from information_schema.TABLES
+        WHERE TABLE_SCHEMA=(select database())
+    </select>
+
+    <sql id="MySQL_Column_Info">
+        `TABLE_CATALOG`,`TABLE_SCHEMA`,`TABLE_NAME`,
+        `COLUMN_NAME`,`ORDINAL_POSITION`,`COLUMN_DEFAULT`,
+        `IS_NULLABLE`,`DATA_TYPE`,`CHARACTER_MAXIMUM_LENGTH`,
+        `CHARACTER_OCTET_LENGTH`,`NUMERIC_PRECISION`,`NUMERIC_SCALE`,
+        `DATETIME_PRECISION`,`CHARACTER_SET_NAME`,`COLLATION_NAME`,
+        `COLUMN_TYPE`,`COLUMN_KEY`,`EXTRA`,
+        `PRIVILEGES`,`COLUMN_COMMENT`,`GENERATION_EXPRESSION`,
+        `SRS_ID`
+    </sql>
+
+    <select id="selectColumnsByTableName" resultType="com.yiyan.boot.mybatis.core.model.generator.Columns">
+        select
+        <include refid="MySQL_Column_Info"/>
+        FROM information_schema.COLUMNS
+        WHERE TABLE_SCHEMA = (select database()) AND TABLE_NAME=#{tableName}
+        ORDER BY ORDINAL_POSITION
+    </select>
+
+
+    <!-- 测试数据生产方法，$为动态插入变量请勿修改 -->
+    <insert id="insertData">
+        insert into ${tableName}
+        <foreach collection="columns" item="column" open="(" close=")" separator=",">
+            ${column}
+        </foreach>
+        values
+        <foreach collection="data" item="map" separator=",">
+            (
+            <foreach collection="map.entrySet()" item="value" index="key" separator=",">
+                #{value}
+            </foreach>
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        <foreach collection="columns" item="column" separator=",">
+            ${column} = VALUES(${column})
+        </foreach>
+    </insert>
+</mapper>

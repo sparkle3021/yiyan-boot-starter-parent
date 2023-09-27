@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.yiyan.boot.redis.autoconfigure.RedissonAutoConfiguration, \
+    com.yiyan.boot.redis.core.config.RedisTemplateConfig, \
+    com.yiyan.boot.redis.autoconfigure.RedisBloomFilterAutoConfiguration
