@@ -9,7 +9,7 @@ import com.alipay.easysdk.payment.facetoface.models.AlipayTradePrecreateResponse
 import com.alipay.easysdk.payment.huabei.models.AlipayTradeCreateResponse;
 import com.alipay.easysdk.payment.page.models.AlipayTradePagePayResponse;
 import com.alipay.easysdk.payment.wap.models.AlipayTradeWapPayResponse;
-import com.oho.common.utils.date.DateUtils;
+import com.yiyan.boot.common.utils.date.DateUtils;
 import com.yiyan.boot.payment.alipay.core.model.AlipayHuabeiParam;
 import com.yiyan.boot.payment.alipay.core.model.AlipayPaymentParam;
 import lombok.extern.slf4j.Slf4j;

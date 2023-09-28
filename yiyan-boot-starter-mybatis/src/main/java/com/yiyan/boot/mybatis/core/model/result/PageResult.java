@@ -1,7 +1,7 @@
 package com.yiyan.boot.mybatis.core.model.result;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.oho.common.result.BaseResult;
+import com.yiyan.boot.common.result.BaseResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

@@ -1,9 +1,10 @@
 package com.yiyan.boot.redis.autoconfigure;
 
-import com.oho.common.utils.BeanUtils;
-import com.oho.common.utils.ObjectUtils;
-import com.yiyan.boot.redis.core.utils.RedisLockUtil;
+
+import com.yiyan.boot.common.utils.BeanUtils;
+import com.yiyan.boot.common.utils.ObjectUtils;
 import com.yiyan.boot.redis.autoconfigure.properties.RedissonProperties;
+import com.yiyan.boot.redis.core.utils.RedisLockUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;

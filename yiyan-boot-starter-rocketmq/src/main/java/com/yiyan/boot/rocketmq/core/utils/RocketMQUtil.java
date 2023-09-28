@@ -1,7 +1,8 @@
 package com.yiyan.boot.rocketmq.core.utils;
 
-import com.oho.common.exception.Asserts;
-import com.oho.common.utils.StringUtils;
+
+import com.yiyan.boot.common.exception.Asserts;
+import com.yiyan.boot.common.utils.StringUtils;
 import com.yiyan.boot.rocketmq.core.model.MQMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendCallback;

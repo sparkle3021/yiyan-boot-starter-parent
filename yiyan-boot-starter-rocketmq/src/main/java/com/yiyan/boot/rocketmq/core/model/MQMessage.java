@@ -1,7 +1,7 @@
 package com.yiyan.boot.rocketmq.core.model;
 
-import com.oho.common.utils.IdUtils;
-import com.oho.common.utils.StringUtils;
+import com.yiyan.boot.common.utils.IdUtils;
+import com.yiyan.boot.common.utils.StringUtils;
 import com.yiyan.boot.rocketmq.core.enums.DelayLevel;
 import lombok.Data;
 

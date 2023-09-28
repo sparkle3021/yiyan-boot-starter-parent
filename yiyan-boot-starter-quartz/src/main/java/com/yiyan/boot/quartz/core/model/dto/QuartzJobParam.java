@@ -1,9 +1,9 @@
 package com.yiyan.boot.quartz.core.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.oho.common.utils.StringUtils;
-import com.yiyan.boot.quartz.core.utils.CronUtils;
+import com.yiyan.boot.common.utils.StringUtils;
 import com.yiyan.boot.quartz.core.model.contant.ScheduleConstants;
+import com.yiyan.boot.quartz.core.utils.CronUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

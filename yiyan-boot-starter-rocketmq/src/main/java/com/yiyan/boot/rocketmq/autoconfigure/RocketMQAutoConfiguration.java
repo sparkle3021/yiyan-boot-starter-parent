@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Import;
 @Import({RocketMQUtil.class})
 @Configuration
 @ConditionalOnProperty(value = "rocketmq.name-server")
-@ComponentScan("com.oho.rocketmq")
+@ComponentScan("com.yiyan.boot.rocketmq")
 public class RocketMQAutoConfiguration {
 
 }

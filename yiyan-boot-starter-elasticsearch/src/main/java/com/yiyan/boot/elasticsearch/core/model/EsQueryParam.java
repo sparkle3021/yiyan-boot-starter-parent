@@ -1,6 +1,6 @@
 package com.yiyan.boot.elasticsearch.core.model;
 
-import com.oho.common.utils.BeanUtils;
+import com.yiyan.boot.common.utils.BeanUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

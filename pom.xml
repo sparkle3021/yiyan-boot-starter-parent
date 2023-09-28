@@ -68,7 +68,7 @@
     </properties>
 
     <modules>
-        <module>./yiyan-boot-starter-common</module>
+        <module>./yiyan-common</module>
         <module>./yiyan-boot-starter-redis</module>
         <module>./yiyan-boot-starter-quartz</module>
         <module>./yiyan-boot-starter-rocketmq</module>
@@ -77,8 +77,15 @@
         <module>./yiyan-boot-starter-mail</module>
         <module>./yiyan-boot-starter-mybatis</module>
         <module>./yiyan-boot-starter-oss</module>
-        <module>yiyan-boot-starter-cache</module>
+        <module>./yiyan-boot-starter-cache</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -107,48 +114,53 @@
             <!-- Spring 组件版本依赖 End -->
             <!-- OHO 模块 -->
             <dependency>
-                <groupId>com.oho</groupId>
-                <artifactId>yiyan-boot-starter-common</artifactId>
+                <groupId>com.yiyan</groupId>
+                <artifactId>yiyan-common</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.oho</groupId>
+                <groupId>com.yiyan</groupId>
                 <artifactId>yiyan-boot-starter-elasticsearch</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.oho</groupId>
+                <groupId>com.yiyan</groupId>
                 <artifactId>yiyan-boot-starter-payment</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.oho</groupId>
+                <groupId>com.yiyan</groupId>
                 <artifactId>yiyan-boot-starter-quartz</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.oho</groupId>
+                <groupId>com.yiyan</groupId>
                 <artifactId>yiyan-boot-starter-mail</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.oho</groupId>
+                <groupId>com.yiyan</groupId>
                 <artifactId>yiyan-boot-starter-redis</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.oho</groupId>
+                <groupId>com.yiyan</groupId>
                 <artifactId>yiyan-boot-starter-rocketmq</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.oho</groupId>
+                <groupId>com.yiyan</groupId>
                 <artifactId>yiyan-boot-starter-mybatis</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.oho</groupId>
+                <groupId>com.yiyan</groupId>
                 <artifactId>yiyan-boot-starter-oss</artifactId>
+                <version>${yiyan-boot-starter-module.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yiyan</groupId>
+                <artifactId>yiyan-boot-starter-cache</artifactId>
                 <version>${yiyan-boot-starter-module.version}</version>
             </dependency>
             <!-- OHO 模块 -->

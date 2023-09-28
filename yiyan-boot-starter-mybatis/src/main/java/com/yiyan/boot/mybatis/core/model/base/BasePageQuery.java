@@ -2,8 +2,8 @@ package com.yiyan.boot.mybatis.core.model.base;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.sql.SqlInjectionUtils;
-import com.oho.common.enums.YesNoEnum;
-import com.oho.common.utils.StringUtils;
+import com.yiyan.boot.common.enums.YesNoEnum;
+import com.yiyan.boot.common.utils.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -13,12 +13,12 @@
     <artifactId>yiyan-boot-starter-mail</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
-    <name>oho-mail</name>
+    <name>yiyan-boot-starter-mail</name>
 
     <dependencies>
         <dependency>
-            <groupId>com.oho</groupId>
-            <artifactId>yiyan-boot-starter-common</artifactId>
+            <groupId>com.yiyan</groupId>
+            <artifactId>yiyan-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

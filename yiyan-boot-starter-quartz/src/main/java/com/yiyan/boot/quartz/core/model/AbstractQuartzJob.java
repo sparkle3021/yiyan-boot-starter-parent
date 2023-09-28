@@ -1,6 +1,6 @@
 package com.yiyan.boot.quartz.core.model;
 
-import com.oho.common.utils.BeanUtils;
+import com.yiyan.boot.common.utils.BeanUtils;
 import com.yiyan.boot.quartz.core.model.contant.ScheduleConstants;
 import com.yiyan.boot.quartz.core.model.dto.QuartzJobParam;
 import lombok.extern.slf4j.Slf4j;

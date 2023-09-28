@@ -7,6 +7,7 @@
         <groupId>com.yiyan</groupId>
         <artifactId>yiyan-boot-starter-parent</artifactId>
         <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>yiyan-boot-starter-cache</artifactId>
@@ -19,18 +20,54 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.oho</groupId>
-            <artifactId>yiyan-boot-starter-common</artifactId>
+            <groupId>com.yiyan</groupId>
+            <artifactId>yiyan-common</artifactId>
         </dependency>
+        <!-- 自动配置 -->
         <dependency>
-            <groupId>com.oho</groupId>
-            <artifactId>yiyan-boot-starter-redis</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
+        <!-- Spring aspectj AOP  -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+        </dependency>
+        <!-- Redisson 缓存配置 -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
-
+        <!-- Redisson 缓存操作 -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+        </dependency>
+        <!-- Spring Redisson 集成组件 -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-data-18</artifactId>
+            <version>3.16.2</version>
+        </dependency>
+        <!-- Redisson fst 快速序列化组件 -->
+        <dependency>
+            <groupId>de.ruedigermoeller</groupId>
+            <artifactId>fst</artifactId>
+            <version>2.50</version>
+        </dependency>
+        <!-- spring boot 自动化配置 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <!-- spring data redis 缓存依赖 -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
     </dependencies>
-
 </project>

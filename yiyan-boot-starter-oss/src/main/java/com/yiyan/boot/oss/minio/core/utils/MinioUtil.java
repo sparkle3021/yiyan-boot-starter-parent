@@ -2,10 +2,10 @@ package com.yiyan.boot.oss.minio.core.utils;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
-import com.oho.common.exception.Asserts;
-import com.oho.common.utils.CollectionUtils;
-import com.oho.common.utils.StringUtils;
-import com.oho.common.utils.date.DateUtils;
+import com.yiyan.boot.common.exception.Asserts;
+import com.yiyan.boot.common.utils.CollectionUtils;
+import com.yiyan.boot.common.utils.StringUtils;
+import com.yiyan.boot.common.utils.date.DateUtils;
 import com.yiyan.boot.oss.minio.autoconfigure.properties.MinioProperties;
 import com.yiyan.boot.oss.minio.autoconfigure.properties.NginxProperties;
 import io.minio.*;

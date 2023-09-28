@@ -1,10 +1,10 @@
 package com.yiyan.boot.mail.general.utils;
 
-import com.oho.common.enums.YesNoEnum;
-import com.oho.common.exception.Asserts;
-import com.oho.common.utils.CollectionUtils;
-import com.oho.common.utils.StringUtils;
-import com.oho.common.utils.date.DateUtils;
+import com.yiyan.boot.common.enums.YesNoEnum;
+import com.yiyan.boot.common.exception.Asserts;
+import com.yiyan.boot.common.utils.CollectionUtils;
+import com.yiyan.boot.common.utils.StringUtils;
+import com.yiyan.boot.common.utils.date.DateUtils;
 import com.yiyan.boot.mail.general.model.MailContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

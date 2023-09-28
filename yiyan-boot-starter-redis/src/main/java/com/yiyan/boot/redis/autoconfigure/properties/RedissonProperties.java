@@ -1,5 +1,6 @@
 package com.yiyan.boot.redis.autoconfigure.properties;
 
+import com.yiyan.boot.common.utils.json.JsonUtils;
 import io.netty.channel.EventLoopGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -56,7 +57,7 @@ public class RedissonProperties {
      * 默认值: `org.redisson.codec.JsonJacksonCodec`
      * Redisson的对象编码类是用于将对象进行序列化和反序列化，以实现对该对象在Redis里的读取和存储。
      */
-    private Codec codec = new JsonJacksonCodec();
+    private Codec codec = new JsonJacksonCodec(JsonUtils.objectMapper);
 
     /**
      * executor（线程池）

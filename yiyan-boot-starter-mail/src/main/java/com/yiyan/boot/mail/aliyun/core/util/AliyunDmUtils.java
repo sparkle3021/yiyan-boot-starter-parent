@@ -1,9 +1,9 @@
 package com.yiyan.boot.mail.aliyun.core.util;
 
 import com.aliyun.dm20151123.models.*;
-import com.oho.common.enums.YesNoEnum;
-import com.oho.common.utils.JsonUtils;
-import com.oho.common.utils.date.DateUtils;
+import com.yiyan.boot.common.enums.YesNoEnum;
+import com.yiyan.boot.common.utils.date.DateUtils;
+import com.yiyan.boot.common.utils.json.JsonUtils;
 import com.yiyan.boot.mail.aliyun.core.model.content.DmBatchSendMail;
 import com.yiyan.boot.mail.aliyun.core.model.content.DmSingleSendMail;
 import com.yiyan.boot.mail.aliyun.core.model.task.DmTaskQueryDTO;

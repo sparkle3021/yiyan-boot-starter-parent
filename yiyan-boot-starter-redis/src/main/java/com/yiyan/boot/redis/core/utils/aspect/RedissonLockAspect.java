@@ -1,7 +1,7 @@
 package com.yiyan.boot.redis.core.utils.aspect;
 
 import cn.hutool.core.util.StrUtil;
-import com.oho.common.utils.SpElUtils;
+import com.yiyan.boot.common.utils.SpElUtils;
 import com.yiyan.boot.redis.core.utils.RedisLockUtil;
 import com.yiyan.boot.redis.core.utils.annotation.RedissonLock;
 import lombok.extern.slf4j.Slf4j;

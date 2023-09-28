@@ -1,6 +1,7 @@
 package com.yiyan.boot.redis.core.config;
 
-import com.oho.common.utils.JsonUtils;
+
+import com.yiyan.boot.common.utils.json.JsonUtils;
 import com.yiyan.boot.redis.core.utils.RedisUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
