@@ -28,6 +28,11 @@
             <groupId>com.yiyan</groupId>
             <artifactId>yiyan-common</artifactId>
         </dependency>
+        <!-- AWS S3 -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+        </dependency>
         <!-- Aliyun SDK -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>

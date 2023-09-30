@@ -47,6 +47,7 @@
         <minio.version>8.2.1</minio.version>
         <aliyun-sdk-oss.version>3.15.1</aliyun-sdk-oss.version>
         <qiniu-java-sdk.version>7.7.0</qiniu-java-sdk.version>
+        <aws-java-sdk-s3.version>1.12.560</aws-java-sdk-s3.version>
         <!-- 常用开发工具 -->
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <ip2region.version>2.7.0</ip2region.version>
@@ -245,6 +246,13 @@
                 <groupId>com.qiniu</groupId>
                 <artifactId>qiniu-java-sdk</artifactId>
                 <version>${qiniu-java-sdk.version}</version>
+            </dependency>
+
+            <!-- AWS S3 API -->
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-s3</artifactId>
+                <version>${aws-java-sdk-s3.version}</version>
             </dependency>
 
             <!-- Email -->

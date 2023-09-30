@@ -1,11 +1,11 @@
 package com.yiyan.boot.oss.qiniu.autoconfigure;
 
-import com.yiyan.boot.oss.qiniu.autoconfigure.properties.QiniuOssProperties;
-import com.yiyan.boot.oss.qiniu.core.QiniuOssUtil;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.persistent.FileRecorder;
 import com.qiniu.util.Auth;
+import com.yiyan.boot.oss.qiniu.autoconfigure.properties.QiniuOssProperties;
+import com.yiyan.boot.oss.qiniu.core.QiniuOssUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,6 +24,7 @@ import java.io.IOException;
 @Configuration
 @ConditionalOnClass(QiniuOssUtil.class)
 @EnableConfigurationProperties(QiniuOssProperties.class)
+@ConditionalOnProperty(prefix = "oss.aliyun.enable", havingValue = "true")
 public class QiniuOssAutoConfiguration {
     /**
      * 注入属性配置类

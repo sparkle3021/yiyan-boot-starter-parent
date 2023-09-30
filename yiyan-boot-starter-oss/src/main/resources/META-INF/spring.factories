@@ -1,4 +1,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
     com.yiyan.boot.oss.aliyun.autoconfigure.AliyunOssAutoConfiguration, \
     com.yiyan.boot.oss.qiniu.autoconfigure.QiniuOssAutoConfiguration, \
-    com.yiyan.boot.oss.minio.autoconfigure.MinioAutoConfiguration
+    com.yiyan.boot.oss.minio.autoconfigure.MinioAutoConfiguration, \
+    com.yiyan.boot.oss.s3.autoconfigure.S3AutoConfiguration
