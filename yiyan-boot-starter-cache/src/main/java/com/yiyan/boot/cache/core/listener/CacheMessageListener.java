@@ -2,7 +2,7 @@ package com.yiyan.boot.cache.core.listener;
 
 
 import com.yiyan.boot.cache.autoconfigure.properties.MultiLayerCacheProperties;
-import com.yiyan.boot.cache.core.model.CacheData;
+import com.yiyan.boot.cache.core.model.CacheMessage;
 import com.yiyan.boot.cache.core.service.impl.CaffeineCacheServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.listener.MessageListener;
@@ -11,7 +11,7 @@ import org.redisson.api.listener.MessageListener;
  * 缓存消息发布/订阅监听器
  */
 @Slf4j
-public class CacheMessageListener implements MessageListener<CacheData> {
+public class CacheMessageListener implements MessageListener<CacheMessage> {
 
     /**
      * Caffeine 缓存管理实现接口
@@ -29,18 +29,18 @@ public class CacheMessageListener implements MessageListener<CacheData> {
      * @param cacheMessage
      */
     @Override
-    public void onMessage(CharSequence channel, CacheData cacheMessage) {
-        log.info("onMessage # receive a redis message, channel: " + channel);
+    public void onMessage(CharSequence channel, CacheMessage cacheMessage) {
+        log.info("[缓存] - [接收缓存更新通知] - 接收到的消息 ：{}", channel);
         try {
             // 如果是本机消息， 不做清除
             if (!MultiLayerCacheProperties.SYSTEM_ID.equals(cacheMessage.getSystemId())) {
                 // 清理本地缓存信息
                 caffeineCacheService.clearNotSend(cacheMessage.getCacheNames(), cacheMessage.getKey());
-                log.info("onMessage # clear local cache {}, the key is {}",
+                log.info("[缓存] - [接收缓存更新通知] - 清除本地缓存：{}, 缓存Key为: {}",
                         cacheMessage.getCacheNames(), cacheMessage.getKey());
             }
         } catch (Exception e) {
-            log.error("onMessage error: # " + e.getMessage(), e);
+            log.error("[缓存] - [接收缓存更新通知] - 异常 ：" + e.getMessage(), e);
         }
     }
 }

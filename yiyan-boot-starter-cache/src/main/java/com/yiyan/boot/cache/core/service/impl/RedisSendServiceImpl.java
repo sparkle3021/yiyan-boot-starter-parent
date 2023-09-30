@@ -1,11 +1,14 @@
 package com.yiyan.boot.cache.core.service.impl;
 
 import com.esotericsoftware.minlog.Log;
+import com.yiyan.boot.cache.core.model.CacheMessage;
 import com.yiyan.boot.cache.core.service.RedisSendService;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 
 /**
+ * Redis缓存变更消息发送接口实现类
+ *
  * @author MENGJIAO
  * @createDate 2023-09-28 下午 03:25
  */
@@ -38,8 +41,7 @@ public class RedisSendServiceImpl implements RedisSendService {
     @Override
     public void sendMessage(String[] cacheNames, Object key) {
         RTopic rTopic = redissonClient.getTopic(topicName);
-        // TODO: 对象替换成消息对象
-        long receiveCount = rTopic.publish(new Object());
+        long receiveCount = rTopic.publish(new CacheMessage(cacheNames, key));
         Log.info("Redisson消息发送成功，接收者数量：" + receiveCount);
     }
 }

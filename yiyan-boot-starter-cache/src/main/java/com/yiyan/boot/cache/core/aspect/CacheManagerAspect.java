@@ -7,10 +7,10 @@ import com.yiyan.boot.cache.core.annotation.CacheDelete;
 import com.yiyan.boot.cache.core.annotation.CachePut;
 import com.yiyan.boot.cache.core.annotation.Cached;
 import com.yiyan.boot.cache.core.service.CacheService;
-import com.yiyan.boot.cache.core.utils.CacheUtil;
 import com.yiyan.boot.common.exception.Asserts;
 import com.yiyan.boot.common.utils.ObjectUtils;
 import com.yiyan.boot.common.utils.SpElUtils;
+import com.yiyan.boot.common.utils.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -60,8 +59,19 @@ public class CacheManagerAspect {
     public void executionOfCacheDeleteMethod() {
     }
 
+    public static long buildCacheKey(Object... args) {
+        StringBuilder key = new StringBuilder(":");
+        for (Object obj : args) {
+            if (obj != null) {
+                key.append(obj.toString()).append(":");
+            }
+        }
+        return DigestUtils.sha1Hex(key.toString()).hashCode();
+    }
+
     /**
-     * 获取缓存，如果没有则执行方法，并将结果缓存
+     * 获取缓存
+     * ps: 如果没有则执行方法，并将结果缓存
      *
      * @param proceedingJoinPoint 切点
      * @return Object
@@ -82,15 +92,15 @@ public class CacheManagerAspect {
         try {
             cachedAnnotation = getAnnotation(proceedingJoinPoint, Cached.class);
             // 如果没有指定key表达式，则使用默认的key生成策略
-            if (StringUtils.isEmpty(cachedAnnotation.keyExpression())) {
-                cacheKey = CacheUtil.buildCacheKey(proceedingJoinPoint.getArgs());
+            if (StringUtils.isEmpty(cachedAnnotation.cacheKay())) {
+                cacheKey = buildCacheKey(proceedingJoinPoint.getArgs());
             } else {
                 cacheKey = parseAndGetCacheKeyFromExpression(generateOriginalCachedKey(proceedingJoinPoint, cachedAnnotation));
             }
             // 从缓存中获取数据
             returnObject = redisCacheService.getFromCache(cachedAnnotation.cacheName(), cacheKey);
         } catch (Exception e) {
-            log.error("getAndSaveInCache # Redis op Exception while trying to get from cache ## " + e.getMessage(), e);
+            log.error("[缓存] - [获取缓存] - 异常 ：" + e.getMessage(), e);
         }
         // 如果缓存中有数据，则直接返回
         if (returnObject != null) {
@@ -105,23 +115,22 @@ public class CacheManagerAspect {
                     // 异步保存
                     redisCacheService
                             .saveInRedisAsync(new String[]{cachedAnnotation.cacheName()}, cacheKey,
-                                    returnObject, cachedAnnotation.TTL());
+                                    returnObject, cachedAnnotation.ttl());
                 } else {
                     // 同步保存
                     redisCacheService
                             .save(new String[]{cachedAnnotation.cacheName()}, cacheKey,
-                                    returnObject, cachedAnnotation.TTL());
+                                    returnObject, cachedAnnotation.ttl());
                 }
             } catch (Exception e) {
-                log.error("getAndSaveInCache # Exception occurred while trying to save data in redis##" + e.getMessage(),
-                        e);
+                log.error("[缓存] - [Redis缓存数据] - 异常 ：" + e.getMessage(), e);
             }
         }
         return returnObject;
     }
 
     /**
-     * 缓存更新
+     * 更新缓存
      *
      * @param joinPoint    切点
      * @param returnObject 返回值
@@ -137,28 +146,30 @@ public class CacheManagerAspect {
                 return;
             }
             CachePut cachePutAnnotation = getAnnotation(joinPoint, CachePut.class);
-
             Object cacheKey = parseAndGetCacheKeyFromExpression(generateOriginalCachePutKey(joinPoint, cachePutAnnotation));
-
             if (cachePutAnnotation.isAsync()) {
-                redisCacheService.saveInRedisAsync(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.TTL());
+                redisCacheService.saveInRedisAsync(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.ttl());
             } else {
-                redisCacheService.save(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.TTL());
+                redisCacheService.save(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.ttl());
             }
         } catch (Exception e) {
             log.error("putInCache # Data save failed ## " + e.getMessage(), e);
         }
     }
 
+
+    private Object callActualMethod(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        return proceedingJoinPoint.proceed();
+    }
+
     /**
-     * 缓存删除
+     * 删除删除
      *
      * @param joinPoint    切点
      * @param returnObject 返回值
      */
     @AfterReturning(pointcut = "executionOfCacheDeleteMethod()", returning = "returnObject")
     public void deleteCache(final JoinPoint joinPoint, final Object returnObject) {
-
         try {
             // 如果没有开启缓存，直接执行方法
             if (!cacheConfigProperties.isEnable()) {
@@ -194,18 +205,22 @@ public class CacheManagerAspect {
         }
     }
 
-
-    private Object callActualMethod(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        return proceedingJoinPoint.proceed();
-    }
-
-    private <T extends Annotation> T getAnnotation(JoinPoint proceedingJoinPoint,
+    /**
+     * 获取注解实例
+     *
+     * @param joinPoint       切点
+     * @param annotationClass 注解类
+     * @param <T>             注解泛型
+     * @return 注解实例
+     * @throws NoSuchMethodException 异常
+     */
+    private <T extends Annotation> T getAnnotation(JoinPoint joinPoint,
                                                    Class<T> annotationClass) throws NoSuchMethodException {
-        MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         String methodName = method.getName();
         if (method.getDeclaringClass().isInterface()) {
-            method = proceedingJoinPoint.getTarget().getClass().getDeclaredMethod(methodName,
+            method = joinPoint.getTarget().getClass().getDeclaredMethod(methodName,
                     method.getParameterTypes());
         }
         return method.getAnnotation(annotationClass);
@@ -226,7 +241,7 @@ public class CacheManagerAspect {
             prefix = StrUtil.isBlank(cacheOptionAnnotation.cacheName()) ? SpElUtils.getMethodKey(method) : cacheOptionAnnotation.cacheName();
         }
         StringBuilder key = new StringBuilder(prefix + ":");
-        Map<String, String> stringStringMap = SpElUtils.parseSpEls(method, joinPoint.getArgs(), cacheOptionAnnotation.keyExpression());
+        Map<String, String> stringStringMap = SpElUtils.parseSpEls(method, joinPoint.getArgs(), cacheOptionAnnotation.cacheKay());
         Set<String> strings = stringStringMap.keySet();
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
@@ -254,7 +269,7 @@ public class CacheManagerAspect {
             }
         }
         StringBuilder key = new StringBuilder(prefix + ":");
-        Map<String, String> stringStringMap = SpElUtils.parseSpEls(method, joinPoint.getArgs(), cacheOptionAnnotation.keyExpression());
+        Map<String, String> stringStringMap = SpElUtils.parseSpEls(method, joinPoint.getArgs(), cacheOptionAnnotation.cacheKey());
         Set<String> strings = stringStringMap.keySet();
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
@@ -282,7 +297,7 @@ public class CacheManagerAspect {
             }
         }
         StringBuilder key = new StringBuilder(prefix + ":");
-        Map<String, String> stringStringMap = SpElUtils.parseSpEls(method, joinPoint.getArgs(), cacheOptionAnnotation.keyExpression());
+        Map<String, String> stringStringMap = SpElUtils.parseSpEls(method, joinPoint.getArgs(), cacheOptionAnnotation.cacheKey());
         Set<String> strings = stringStringMap.keySet();
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
@@ -291,8 +306,13 @@ public class CacheManagerAspect {
         return key.toString();
     }
 
+    /**
+     * 加密缓存key
+     *
+     * @param originalKey 原始key
+     * @return 加密后的key
+     */
     public Object parseAndGetCacheKeyFromExpression(String originalKey) {
         return DigestUtils.sha1Hex(originalKey).hashCode();
     }
-
 }

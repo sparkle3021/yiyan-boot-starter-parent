@@ -34,11 +34,44 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
         this.redisSendService = redisSendService;
     }
 
+    /**
+     * 初始化caffeine缓存对象
+     *
+     * @return
+     */
+    public Cache<Object, Object> caffeineCacheInit() {
+        MultiLayerCacheProperties.LocalCache cacheConfigProperties = multiLayerCacheProperties.getLocalCache();
+
+        Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
+        // Caffeine 缓存初始化参数配置
+        // 设置初始缓存容量
+        if (cacheConfigProperties.getInitialCapacity() > 0) {
+            cacheBuilder.initialCapacity(cacheConfigProperties.getInitialCapacity());
+        }
+        // 设置缓存最大容量
+        if (cacheConfigProperties.getMaximumSize() > 0) {
+            cacheBuilder.maximumSize(cacheConfigProperties.getMaximumSize());
+        }
+        // 设置缓存最后一次写入或访问后经过固定时间过期
+        if (cacheConfigProperties.getExpireAfterAccess() > 0) {
+            cacheBuilder.expireAfterAccess(cacheConfigProperties.getExpireAfterAccess(), TimeUnit.MILLISECONDS);
+        }
+        // 设置缓存最后一次写入后经过固定时间过期
+        if (cacheConfigProperties.getExpireAfterWrite() > 0) {
+            cacheBuilder.expireAfterWrite(cacheConfigProperties.getExpireAfterWrite(), TimeUnit.MILLISECONDS);
+        }
+        // 在写入后刷新缓存的时间
+        if (cacheConfigProperties.getRefreshAfterWrite() > 0) {
+            cacheBuilder.refreshAfterWrite(cacheConfigProperties.getRefreshAfterWrite(), TimeUnit.MILLISECONDS);
+        }
+        return cacheBuilder.build();
+    }
+
 
     /**
      * 清理缓存（支持批量清理）
      *
-     * @param cacheNames
+     * @param cacheNames 缓存名称
      */
     private void clearAndSend(String[] cacheNames) {
         for (String cacheName : cacheNames) {
@@ -51,8 +84,8 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     /**
      * 清理缓存（支持批量清理）
      *
-     * @param cacheNames
-     * @param key
+     * @param cacheNames 缓存名称
+     * @param key        缓存key
      */
     private void clearAndSend(String[] cacheNames, Object key) {
         for (String cacheName : cacheNames) {
@@ -66,8 +99,8 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     /**
      * 保存并且发送缓存（支持批量清理）
      *
-     * @param cacheNames
-     * @param key
+     * @param cacheNames 缓存名称
+     * @param key        缓存key
      */
     private void saveAndSend(String[] cacheNames, Object key, Object cacheValue) {
         for (String cacheName : cacheNames) {
@@ -81,8 +114,8 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     /**
      * 清理缓存（支持批量清理）
      *
-     * @param cacheNames
-     * @param key
+     * @param cacheNames 缓存名称
+     * @param key        缓存key
      */
     public void clearNotSend(String[] cacheNames, Object key) {
         for (String cacheName : cacheNames) {
@@ -94,8 +127,8 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     /**
      * 保存本地缓存
      *
-     * @param cacheName
-     * @param key
+     * @param cacheName 缓存名称
+     * @param key       缓存key
      */
     private void saveAndSend(String cacheName, Object key, Object value, boolean isNeedSend) {
         // 获取缓存对象
@@ -114,41 +147,12 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
 
 
     /**
-     * 初始化caffeine缓存对象
-     *
-     * @return
-     */
-    public Cache<Object, Object> caffeineCacheInit() {
-        MultiLayerCacheProperties.LocalCache cacheConfigProperties = multiLayerCacheProperties.getLocalCache();
-
-        Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
-        // Caffeine 缓存初始化参数配置
-        if (cacheConfigProperties.getExpireAfterAccess() > 0) {
-            cacheBuilder.expireAfterAccess(cacheConfigProperties.getExpireAfterAccess(), TimeUnit.MILLISECONDS);
-        }
-        if (cacheConfigProperties.getExpireAfterWrite() > 0) {
-            cacheBuilder.expireAfterWrite(cacheConfigProperties.getExpireAfterWrite(), TimeUnit.MILLISECONDS);
-        }
-        if (cacheConfigProperties.getInitialCapacity() > 0) {
-            cacheBuilder.initialCapacity(cacheConfigProperties.getInitialCapacity());
-        }
-        if (cacheConfigProperties.getMaximumSize() > 0) {
-            cacheBuilder.maximumSize(cacheConfigProperties.getMaximumSize());
-        }
-        if (cacheConfigProperties.getRefreshAfterWrite() > 0) {
-            cacheBuilder.refreshAfterWrite(cacheConfigProperties.getRefreshAfterWrite(), TimeUnit.MILLISECONDS);
-        }
-        return cacheBuilder.build();
-    }
-
-
-    /**
      * 保存更新Caffeine缓存
      *
-     * @param cacheName
-     * @param cacheKey
-     * @param result
-     * @param caffeineCache
+     * @param cacheName     缓存名称
+     * @param cacheKey      缓存key
+     * @param result        缓存值
+     * @param caffeineCache 缓存对象
      */
     private void saveCaffeineCache(String cacheName, Object cacheKey, Object result, Cache caffeineCache) {
         if (null != result) {
@@ -192,8 +196,8 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     /**
      * 清除本地缓存
      *
-     * @param cacheName
-     * @param key
+     * @param cacheName 缓存名称
+     * @param key       缓存key
      */
     private void clearAndSend(String cacheName, Object key, boolean isNeedSend) {
         // 获取缓存对象

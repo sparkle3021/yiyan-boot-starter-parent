@@ -7,6 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * 多级缓存配置
+ *
  * @author MENGJIAO
  * @createDate 2023-09-28 下午 01:51
  */
@@ -14,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("cacheConfigProperties")
 @ConfigurationProperties(prefix = "multi.cache")
 public class MultiLayerCacheProperties {
-    
+
     public static String SYSTEM_ID;
 
     static {
@@ -123,7 +125,7 @@ public class MultiLayerCacheProperties {
          */
         private boolean cluster = false;
         /**
-         * 集群节点
+         * 集群节点 格式：ip:port,ip:port
          */
         private String nodes = null;
         /**

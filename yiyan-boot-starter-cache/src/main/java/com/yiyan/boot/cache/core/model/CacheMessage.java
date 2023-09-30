@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @createDate 2023-09-28 下午 04:06
  */
 @Data
-public class CacheData implements Serializable {
+public class CacheMessage implements Serializable {
 
     /**
      * 系统唯一标识
@@ -28,15 +28,15 @@ public class CacheData implements Serializable {
      */
     private Object key;
 
-    public CacheData() {
+    public CacheMessage() {
     }
 
-    public CacheData(String[] cacheName, Object key) {
+    public CacheMessage(String[] cacheName, Object key) {
         this.cacheNames = cacheName;
         this.key = key;
     }
 
-    public CacheData(String cacheName, Object key) {
+    public CacheMessage(String cacheName, Object key) {
         this.cacheNames = new String[]{cacheName};
         this.key = key;
     }

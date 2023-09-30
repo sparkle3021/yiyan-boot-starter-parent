@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Redis缓存管理实现类
+ *
  * @author MENGJIAO
  * @createDate 2023-09-28 下午 02:39
  */
