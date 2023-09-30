@@ -14,16 +14,27 @@
 
 
     <dependencies>
+        <!-- 自动配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 通用组件 -->
         <dependency>
             <groupId>com.yiyan</groupId>
             <artifactId>yiyan-common</artifactId>
         </dependency>
-
+        <!-- Redis starter -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!-- Redisson Starter -->
+        <!-- Redisson -->
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>

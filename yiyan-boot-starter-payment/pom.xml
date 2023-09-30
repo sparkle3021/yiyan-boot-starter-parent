@@ -13,11 +13,21 @@
     <artifactId>yiyan-boot-starter-payment</artifactId>
 
     <dependencies>
+        <!-- 自动配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 通用组件 -->
         <dependency>
             <groupId>com.yiyan</groupId>
             <artifactId>yiyan-common</artifactId>
         </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.alipay.sdk/alipay-easysdk -->
         <dependency>
             <groupId>com.alipay.sdk</groupId>

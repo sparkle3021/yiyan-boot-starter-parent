@@ -12,11 +12,12 @@
     <artifactId>yiyan-boot-starter-quartz</artifactId>
 
     <dependencies>
+        <!-- 通用组件 -->
         <dependency>
             <groupId>com.yiyan</groupId>
             <artifactId>yiyan-common</artifactId>
         </dependency>
-
+        <!-- Quartz -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
