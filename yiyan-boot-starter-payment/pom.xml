@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>yiyan-boot-starter-payment</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- 自动配置 -->

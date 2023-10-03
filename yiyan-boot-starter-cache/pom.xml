@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>yiyan-boot-starter-cache</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -75,4 +77,8 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>yiyan-boot-starter-cache</finalName>
+    </build>
 </project>

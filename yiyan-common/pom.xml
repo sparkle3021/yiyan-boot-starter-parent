@@ -10,12 +10,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-
     <artifactId>yiyan-common</artifactId>
-    <version>1.0</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
-    <name>yiyan-common</name>
-    <description>通用模块</description>
 
     <dependencies>
         <!--解析自动提示-->

@@ -11,9 +11,8 @@
     </parent>
 
     <artifactId>yiyan-boot-starter-mail</artifactId>
-    <version>1.0</version>
+    <version>0.0.1</version>
     <packaging>jar</packaging>
-    <name>yiyan-boot-starter-mail</name>
 
     <dependencies>
         <!-- 自动配置 -->

@@ -16,7 +16,7 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <yiyan-boot-starter-module.version>1.0</yiyan-boot-starter-module.version>
+        <yiyan-boot-starter-module.version>0.0.1</yiyan-boot-starter-module.version>
         <java.version>1.8</java.version>
         <!-- Spring Boot 版本 -->
         <spring-boot.version>2.7.6</spring-boot.version>

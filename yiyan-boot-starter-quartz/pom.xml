@@ -9,7 +9,10 @@
         <version>0.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
     <artifactId>yiyan-boot-starter-quartz</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- 通用组件 -->
@@ -23,8 +26,4 @@
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <finalName>oho-quartz</finalName>
-    </build>
 </project>

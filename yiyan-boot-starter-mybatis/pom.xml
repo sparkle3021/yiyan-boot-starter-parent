@@ -11,12 +11,8 @@
     </parent>
 
     <artifactId>yiyan-boot-starter-mybatis</artifactId>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- 自动配置 -->

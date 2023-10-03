@@ -11,6 +11,8 @@
     </parent>
 
     <artifactId>yiyan-boot-starter-rocketmq</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!-- 通用组件 -->
@@ -24,8 +26,4 @@
             <artifactId>rocketmq-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <finalName>oho-rocketmq</finalName>
-    </build>
 </project>
