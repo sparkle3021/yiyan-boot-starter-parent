@@ -1,31 +1,33 @@
-# OHO Boot Module
+# YiYan Boot Starter
 
 项目依赖：`Java 8` `Spring Boot 2.7.6`
+
+version: `0.0.1`
 
 ## 项目结构
 
 ```txt
-oho-boot-module
+yiyan-boot-starter-parent		# 父模块
 │          
-├─oho-common		# 公共模块
+├─yiyan-common		                # 公共模块
 │ 
-├─oho-dependencies	# 依赖版本管理
+├─yiyan-boot-starter-cache		# 缓存工具模块
 │      
-├─oho-elasticsearch	# elasticsearch工具模块
+├─yiyan-boot-starter-elasticsearch	# Elasticsearch工具模块
 │                          
-├─oho-mail		# mail 模块
+├─yiyan-boot-starter-mail		# 邮件工具模块
 │                          
-├─oho-mybatis		# mybatis工具模块
+├─yiyan-boot-starter-mybatis		# Mybatis工具模块
 │                          
-├─oho-oss		# OSS工具模块
+├─yiyan-boot-starter-oss		# 对象存储工具模块
 │                          
-├─oho-payment		# 支付工具模块
+├─yiyan-boot-starter-payment		# 支付工具模块
 │                          
-├─oho-quartz		# 定时任务工具模块模块
+├─yiyan-boot-starter-quartz		# 定时任务工具模块
 │                          
-├─oho-redis		# Redis工具模块
+├─yiyan-boot-starter-redis		# Redis工具模块
 │                          
-└─oho-rocketmq		# RocketMQ工具模块
+└─yiyan-boot-starter-rocketmq		# RocketMQ工具模块
 ```
 
 ## TODO
