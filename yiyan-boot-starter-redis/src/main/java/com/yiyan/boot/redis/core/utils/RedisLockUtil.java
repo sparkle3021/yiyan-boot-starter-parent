@@ -142,6 +142,17 @@ public class RedisLockUtil {
     /**
      * 尝试获取锁，获取到则持有该锁返回true,未获取到立即返回false
      *
+     * @param lockKey 锁key
+     * @return true -获取锁成功 false-获取锁失败
+     */
+    public boolean tryLock(String lockKey) {
+        RLock rLock = getLock(lockKey);
+        return rLock.tryLock();
+    }
+
+    /**
+     * 尝试获取锁，获取到则持有该锁返回true,未获取到立即返回false
+     *
      * @param lockKey   锁key
      * @param rLockEnum 锁类型
      * @return true -获取锁成功 false-获取锁失败

@@ -1,5 +1,6 @@
 package com.yiyan.boot.redis.core.utils;
 
+import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,10 @@ public class RedisDistributedId {
      * Id计算起始时间戳
      */
     private static final long BEGIN_TIMESTAMP = 1659312000L;
+
+
+    @Resource(name = "redissonClient")
+    private RedissonClient redissonClient;
 
     @Resource(name = "comRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
@@ -86,5 +91,12 @@ public class RedisDistributedId {
         String[] segments = segment.split(":");
         minId = Long.parseLong(segments[0]) * segmentSize;
         maxId = minId + segmentSize;
+    }
+
+    /**
+     * 基于Redisson 原子增长的方式生成分布式ID
+     */
+    public long nextIdByIncrement(String idSegmentKey) {
+        return redissonClient.getAtomicLong(idSegmentKey).incrementAndGet();
     }
 }
