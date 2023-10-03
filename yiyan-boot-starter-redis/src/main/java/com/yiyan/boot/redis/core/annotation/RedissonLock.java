@@ -1,4 +1,4 @@
-package com.yiyan.boot.redis.core.utils.annotation;
+package com.yiyan.boot.redis.core.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

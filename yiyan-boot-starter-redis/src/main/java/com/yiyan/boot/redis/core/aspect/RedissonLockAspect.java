@@ -1,9 +1,9 @@
-package com.yiyan.boot.redis.core.utils.aspect;
+package com.yiyan.boot.redis.core.aspect;
 
 import cn.hutool.core.util.StrUtil;
 import com.yiyan.boot.common.utils.SpElUtils;
+import com.yiyan.boot.redis.core.annotation.RedissonLock;
 import com.yiyan.boot.redis.core.utils.RedisLockUtil;
-import com.yiyan.boot.redis.core.utils.annotation.RedissonLock;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -32,11 +32,11 @@ public class RedissonLockAspect {
     @Autowired
     private RedisLockUtil redisLockUtil;
 
-    @Pointcut("@annotation(com.yiyan.boot.redis.core.utils.annotation.RedissonLock)")
+    @Pointcut("@annotation(com.yiyan.boot.redis.core.annotation.RedissonLock)")
     public void lockPointcut() {
     }
 
-    @Around("@annotation(com.yiyan.boot.redis.core.utils.annotation.RedissonLock)")
+    @Around("@annotation(com.yiyan.boot.redis.core.annotation.RedissonLock)")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         RedissonLock redissonLock = method.getAnnotation(RedissonLock.class);
