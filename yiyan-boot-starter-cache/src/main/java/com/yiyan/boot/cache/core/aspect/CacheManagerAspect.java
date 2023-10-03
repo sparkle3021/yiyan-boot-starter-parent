@@ -42,7 +42,7 @@ import java.util.Set;
 public class CacheManagerAspect {
 
     @Autowired
-    CacheService redisCacheService;
+    CacheService cacheService;
 
     @Autowired
     private MultiLayerCacheProperties cacheConfigProperties;
@@ -98,7 +98,7 @@ public class CacheManagerAspect {
                 cacheKey = parseAndGetCacheKeyFromExpression(generateOriginalCachedKey(proceedingJoinPoint, cachedAnnotation));
             }
             // 从缓存中获取数据
-            returnObject = redisCacheService.getFromCache(cachedAnnotation.cacheName(), cacheKey);
+            returnObject = cacheService.getFromCache(cachedAnnotation.cacheName(), cacheKey);
         } catch (Exception e) {
             log.error("[缓存] - [获取缓存] - 异常 ：" + e.getMessage(), e);
         }
@@ -113,12 +113,12 @@ public class CacheManagerAspect {
             try {
                 if (cachedAnnotation.isAsync()) {
                     // 异步保存
-                    redisCacheService
+                    cacheService
                             .saveInRedisAsync(new String[]{cachedAnnotation.cacheName()}, cacheKey,
                                     returnObject, cachedAnnotation.ttl());
                 } else {
                     // 同步保存
-                    redisCacheService
+                    cacheService
                             .save(new String[]{cachedAnnotation.cacheName()}, cacheKey,
                                     returnObject, cachedAnnotation.ttl());
                 }
@@ -148,9 +148,9 @@ public class CacheManagerAspect {
             CachePut cachePutAnnotation = getAnnotation(joinPoint, CachePut.class);
             Object cacheKey = parseAndGetCacheKeyFromExpression(generateOriginalCachePutKey(joinPoint, cachePutAnnotation));
             if (cachePutAnnotation.isAsync()) {
-                redisCacheService.saveInRedisAsync(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.ttl());
+                cacheService.saveInRedisAsync(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.ttl());
             } else {
-                redisCacheService.save(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.ttl());
+                cacheService.save(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.ttl());
             }
         } catch (Exception e) {
             log.error("putInCache # Data save failed ## " + e.getMessage(), e);
@@ -188,16 +188,16 @@ public class CacheManagerAspect {
             if (cacheDeleteAnnotation.isAsync()) {
                 // 异步删除
                 if (cacheDeleteAnnotation.removeAll()) {
-                    redisCacheService.invalidateCache(cacheNames);
+                    cacheService.invalidateCache(cacheNames);
                 } else {
-                    redisCacheService.invalidateCache(cacheNames, cacheKey);
+                    cacheService.invalidateCache(cacheNames, cacheKey);
                 }
             } else {
                 // 同步删除
                 if (cacheDeleteAnnotation.removeAll()) {
-                    redisCacheService.invalidateCache(cacheNames);
+                    cacheService.invalidateCache(cacheNames);
                 } else {
-                    redisCacheService.invalidateCache(cacheNames, cacheKey);
+                    cacheService.invalidateCache(cacheNames, cacheKey);
                 }
             }
         } catch (Exception e) {

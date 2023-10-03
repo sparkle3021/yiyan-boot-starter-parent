@@ -66,11 +66,11 @@ public class MultiLayerCacheProperties {
         /**
          * 最后一次读或写操作后经过指定时间过期 单位：秒
          */
-        private int expireAfterAccess;
+        private int expireAfterAccess = 60;
         /**
          * 写入后多久刷新 单位：秒
          */
-        private int refreshAfterWrite;
+        private int refreshAfterWrite = 60;
 
     }
 
@@ -140,6 +140,10 @@ public class MultiLayerCacheProperties {
          * 分布式缓存更新的的topic名称
          */
         private String topicName = "multi-cache:redisson:topic";
+        /**
+         * 分布式缓存前置key
+         */
+        private String cachePrefixKey = "multi-cache:redisson:";
     }
 
     /**

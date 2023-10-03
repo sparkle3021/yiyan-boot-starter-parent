@@ -23,9 +23,12 @@ public class RedisCacheServiceImpl implements CacheService {
 
     private final ExecutorService asyncCachePool;
 
-    public RedisCacheServiceImpl(RedissonClient redissonClient, ExecutorService asyncCachePool) {
+    private final String cachePrefixName;
+
+    public RedisCacheServiceImpl(RedissonClient redissonClient, ExecutorService asyncCachePool, String cachePrefixName) {
         this.redissonClient = redissonClient;
         this.asyncCachePool = asyncCachePool;
+        this.cachePrefixName = cachePrefixName;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class RedisCacheServiceImpl implements CacheService {
         if (StringUtils.isBlank(cacheName) || cacheKey == null) {
             throw new IllegalArgumentException("Cache name or cache key can not be null!");
         }
-        return redissonClient.getMapCache(cacheName).get(cacheKey);
+        return redissonClient.getMapCache(cachePrefixName + cacheName).get(cacheKey);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class RedisCacheServiceImpl implements CacheService {
         }
 
         for (String cacheName : cacheNames) {
-            RMapCache mapCache = redissonClient.getMapCache(cacheName);
+            RMapCache mapCache = redissonClient.getMapCache(cachePrefixName + cacheName);
             boolean isExist = mapCache.isExists();
             if (isExist) {
                 // 已经缓存，直接更新
@@ -52,12 +55,12 @@ public class RedisCacheServiceImpl implements CacheService {
             } else {
                 // 第一次缓存，设定超时时间
                 RBatch batch = redissonClient.createBatch();
-                RMapCacheAsync mapCacheAsync = batch.getMapCache(cacheName);
+                RMapCacheAsync mapCacheAsync = batch.getMapCache(cachePrefixName + cacheName);
                 mapCacheAsync.putAsync(cacheKey, cacheValue, ttl, TimeUnit.SECONDS);
                 mapCacheAsync.expireAsync(ttl, TimeUnit.SECONDS);
                 batch.execute();
             }
-            redissonClient.getMapCache(cacheName).put(cacheKey, cacheValue, ttl, TimeUnit.SECONDS);
+            redissonClient.getMapCache(cachePrefixName + cacheName).put(cacheKey, cacheValue, ttl, TimeUnit.SECONDS);
         }
         return true;
     }
@@ -71,10 +74,10 @@ public class RedisCacheServiceImpl implements CacheService {
             if (StringUtils.isBlank(cacheName)) {
                 continue;
             }
-            if (null == redissonClient.getMapCache(cacheName)) {
+            if (null == redissonClient.getMapCache(cachePrefixName + cacheName)) {
                 continue;
             }
-            redissonClient.getMapCache(cacheName).remove(cacheKey);
+            redissonClient.getMapCache(cachePrefixName + cacheName).remove(cacheKey);
         }
         return true;
     }
@@ -82,7 +85,7 @@ public class RedisCacheServiceImpl implements CacheService {
     @Override
     public boolean invalidateCache(String[] cacheNames) {
         for (String cacheName : cacheNames) {
-            redissonClient.getMapCache(cacheName).delete();
+            redissonClient.getMapCache(cachePrefixName + cacheName).delete();
         }
         return true;
     }

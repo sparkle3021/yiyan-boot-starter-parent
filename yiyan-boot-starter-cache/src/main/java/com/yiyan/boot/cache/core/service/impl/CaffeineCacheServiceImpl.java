@@ -1,6 +1,7 @@
 package com.yiyan.boot.cache.core.service.impl;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.yiyan.boot.cache.autoconfigure.properties.MultiLayerCacheProperties;
 import com.yiyan.boot.cache.core.service.CacheService;
@@ -35,6 +36,28 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     }
 
     /**
+     * 相当于在构建LoadingCache对象的时候 build()方法中指定过期之后的加载策略方法
+     * 方法，refreshAfterWrite=60s属性才生效
+     *
+     * @return
+     */
+    public CacheLoader<Object, Object> cacheLoader() {
+        CacheLoader<Object, Object> cacheLoader = new CacheLoader<Object, Object>() {
+            @Override
+            public Object load(Object key) throws Exception {
+                return null;
+            }
+
+            // 重写这个方法将oldValue值返回回去，进而刷新缓存
+            @Override
+            public Object reload(Object key, Object oldValue) throws Exception {
+                return oldValue;
+            }
+        };
+        return cacheLoader;
+    }
+
+    /**
      * 初始化caffeine缓存对象
      *
      * @return
@@ -60,11 +83,14 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
         if (cacheConfigProperties.getExpireAfterWrite() > 0) {
             cacheBuilder.expireAfterWrite(cacheConfigProperties.getExpireAfterWrite(), TimeUnit.MILLISECONDS);
         }
+        Cache<Object, Object> build = cacheBuilder.build();
         // 在写入后刷新缓存的时间
         if (cacheConfigProperties.getRefreshAfterWrite() > 0) {
             cacheBuilder.refreshAfterWrite(cacheConfigProperties.getRefreshAfterWrite(), TimeUnit.MILLISECONDS);
+            build = cacheBuilder.build(cacheLoader());
         }
-        return cacheBuilder.build();
+
+        return build;
     }
 
 

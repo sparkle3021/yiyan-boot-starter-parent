@@ -137,10 +137,10 @@ public class MultiLayerCacheAutoConfiguration {
         CacheService cacheService = null;
         // 判断是否开启二级缓存
         if (cacheConfigProperties.isSecondCacheEnable()) {
-            CacheService redisCacheService = new RedisCacheServiceImpl(redissonClient, redisExecutor);
+            CacheService redisCacheService = new RedisCacheServiceImpl(redissonClient, redisExecutor, cacheConfigProperties.getRemoteCache().getCachePrefixKey());
             cacheService = new CaffeineCacheServiceImpl(redisCacheService, cacheConfigProperties, redisSendService);
         } else {
-            cacheService = new RedisCacheServiceImpl(redissonClient, redisExecutor);
+            cacheService = new RedisCacheServiceImpl(redissonClient, redisExecutor, cacheConfigProperties.getRemoteCache().getCachePrefixKey());
         }
         log.info("[缓存] - [多级缓存服务初始化成功]");
         return cacheService;
