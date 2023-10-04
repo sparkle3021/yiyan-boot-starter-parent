@@ -37,7 +37,7 @@ public class RedissonAutoConfiguration {
      * @param redissonProperties the redisson properties
      * @return the redisson client
      */
-    @Bean(destroyMethod = "shutdown")
+    @Bean(destroyMethod = "shutdown", name = "redissonClient")
     RedissonClient redisson(RedissonProperties redissonProperties) {
         RedissonConfig redissonConfig = setServerConfig(redissonProperties);
         return Redisson.create(redissonConfig);

@@ -30,8 +30,8 @@ public class CacheMessageListener implements MessageListener<CacheMessage> {
      */
     @Override
     public void onMessage(CharSequence channel, CacheMessage cacheMessage) {
-        log.info("[缓存] - [接收缓存更新通知] - 接收到的消息 ：{}", channel);
         try {
+            log.info("[缓存] - [接收缓存更新通知] - 接收到的消息 ：{}", channel);
             // 如果是本机消息， 不做清除
             if (!MultiLayerCacheProperties.SYSTEM_ID.equals(cacheMessage.getSystemId())) {
                 // 清理本地缓存信息

@@ -1,8 +1,8 @@
 package com.yiyan.boot.cache.core.service.impl;
 
-import com.esotericsoftware.minlog.Log;
 import com.yiyan.boot.cache.core.model.CacheMessage;
 import com.yiyan.boot.cache.core.service.RedisSendService;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RTopic;
 import org.redisson.api.RedissonClient;
 
@@ -12,6 +12,7 @@ import org.redisson.api.RedissonClient;
  * @author MENGJIAO
  * @createDate 2023-09-28 下午 03:25
  */
+@Slf4j
 public class RedisSendServiceImpl implements RedisSendService {
 
     private final RedissonClient redissonClient;
@@ -42,6 +43,6 @@ public class RedisSendServiceImpl implements RedisSendService {
     public void sendMessage(String[] cacheNames, Object key) {
         RTopic rTopic = redissonClient.getTopic(topicName);
         long receiveCount = rTopic.publish(new CacheMessage(cacheNames, key));
-        Log.info("Redisson消息发送成功，接收者数量：" + receiveCount);
+        log.info("[缓存] - [缓存更新通知发送] - 接收者数量：{}", receiveCount);
     }
 }

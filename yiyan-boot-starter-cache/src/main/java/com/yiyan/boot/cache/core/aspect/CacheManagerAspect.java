@@ -153,7 +153,7 @@ public class CacheManagerAspect {
                 cacheService.save(cachePutAnnotation.cacheNames(), cacheKey, returnObject, cachePutAnnotation.ttl());
             }
         } catch (Exception e) {
-            log.error("putInCache # Data save failed ## " + e.getMessage(), e);
+            log.error("[缓存] - [缓存更新失败] - " + e.getMessage(), e);
         }
     }
 
@@ -201,7 +201,7 @@ public class CacheManagerAspect {
                 }
             }
         } catch (Exception e) {
-            log.error("putInCache # Data delete failed! ## " + e.getMessage(), e);
+            log.error("[缓存] - [缓存移除失败] - " + e.getMessage(), e);
         }
     }
 
@@ -246,7 +246,7 @@ public class CacheManagerAspect {
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
         }
-        log.info("getAndSaveInCache # key:{}", key);
+        log.info("[缓存] - [查询/保存] - [解析缓存KEY] : {}", key);
         return key.toString();
     }
 
@@ -274,7 +274,7 @@ public class CacheManagerAspect {
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
         }
-        log.info("getAndSaveInCache # key:{}", key);
+        log.info("[缓存] - [更新] - [解析缓存KEY] : {}", key);
         return key.toString();
     }
 
@@ -302,7 +302,7 @@ public class CacheManagerAspect {
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
         }
-        log.info("getAndSaveInCache # key:{}", key);
+        log.info("[缓存] - [移除] - [解析缓存KEY] : {}", key);
         return key.toString();
     }
 

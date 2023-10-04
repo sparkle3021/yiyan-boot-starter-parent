@@ -1,5 +1,6 @@
 package com.yiyan.boot.cache.core.model;
 
+import com.yiyan.boot.cache.autoconfigure.properties.MultiLayerCacheProperties;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ public class CacheMessage implements Serializable {
     /**
      * 系统唯一标识
      */
-    private String systemId = "yiyan";
+    private String systemId = MultiLayerCacheProperties.SYSTEM_ID;
 
     /**
      * 缓存名称

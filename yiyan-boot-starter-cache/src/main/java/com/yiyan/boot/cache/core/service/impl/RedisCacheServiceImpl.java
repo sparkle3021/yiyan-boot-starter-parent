@@ -1,6 +1,7 @@
 package com.yiyan.boot.cache.core.service.impl;
 
 import com.yiyan.boot.cache.core.service.CacheService;
+import com.yiyan.boot.common.exception.Asserts;
 import com.yiyan.boot.common.utils.ObjectUtils;
 import com.yiyan.boot.common.utils.StringUtils;
 import org.redisson.api.RBatch;
@@ -34,7 +35,7 @@ public class RedisCacheServiceImpl implements CacheService {
     @Override
     public Object getFromCache(String cacheName, Object cacheKey) {
         if (StringUtils.isBlank(cacheName) || cacheKey == null) {
-            throw new IllegalArgumentException("Cache name or cache key can not be null!");
+            Asserts.fail("缓存KEY或缓存名称不能为空！");
         }
         return redissonClient.getMapCache(cachePrefixName + cacheName).get(cacheKey);
     }
@@ -43,7 +44,7 @@ public class RedisCacheServiceImpl implements CacheService {
     public boolean save(String[] cacheNames, Object cacheKey, Object cacheValue, long ttl) {
         // 校验参数
         if (ObjectUtils.isEmpty(cacheKey) || 0 == cacheNames.length) {
-            throw new IllegalArgumentException("Cache key or cache value can not be null!");
+            Asserts.fail("缓存KEY或缓存名称不能为空！");
         }
 
         for (String cacheName : cacheNames) {
@@ -68,7 +69,7 @@ public class RedisCacheServiceImpl implements CacheService {
     @Override
     public boolean invalidateCache(String[] cacheNames, Object cacheKey) {
         if (ObjectUtils.isEmpty(cacheKey)) {
-            throw new IllegalArgumentException("Cache key can not be null!");
+            Asserts.fail("缓存KEY不能为空！");
         }
         for (String cacheName : cacheNames) {
             if (StringUtils.isBlank(cacheName)) {
