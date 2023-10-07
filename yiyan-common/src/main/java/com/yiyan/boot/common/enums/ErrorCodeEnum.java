@@ -67,7 +67,11 @@ public enum ErrorCodeEnum implements ErrorCodeEnumFormat {
     /**
      * 用户不存在
      */
-    USER_NOT_EXIST("2008", "用户不存在");
+    USER_NOT_EXIST("2008", "用户不存在"),
+    /**
+     * 请求过于频繁，请稍后再试
+     */
+    REQUEST_FREQUENTLY("2009", "请求过于频繁，请稍后再试");
 
 
     /**

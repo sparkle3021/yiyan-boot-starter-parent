@@ -162,3 +162,27 @@ public class TestClass {
 
 }
 ```
+
+### 窗口限流使用
+
+```java
+import com.yiyan.boot.redis.core.annotation.RedisWindowRateLimit;
+import com.yiyan.boot.redis.core.enums.LimitLevel;
+import com.yiyan.boot.redis.core.enums.LimitType;
+
+public class WindowLimiter {
+
+     @RedisWindowRateLimit(type = LimitType.SLIDING_WINDOW_RATE_LIMIT, level = LimitLevel.IP, timeWindow = 5, maxPermits = 3)
+     public void fun() {
+        // do something
+     }
+}
+```
+
+> 注解参数：
+> 1. `type`： 限流类型， 默认值： LimitType.SLIDING_WINDOW_RATE_LIMIT
+> 2. `level`： 限流级别， 默认值： LimitLevel.IP
+> 3. `timeWindow`： 时间窗口
+> 4. `maxPermits` ： 窗口时间内最大许可数
+> 5. `prefixKey` ： 限流前缀， 默认值： 方法名
+> 6. `key` ： 限流key
