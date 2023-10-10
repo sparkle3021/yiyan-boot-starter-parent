@@ -1,5 +1,6 @@
 package com.yiyan.boot.common.utils;
 
+import com.yiyan.boot.common.utils.json.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.expression.EvaluationContext;
@@ -30,22 +31,36 @@ public class SpElUtils {
             context.setVariable(params[i], args[i]);//所有参数都作为原材料扔进去
         }
         Expression expression = parser.parseExpression(spEl);
-        log.info("[ spEl 解析内容 ]: {}", expression.getValue(context, String.class));
-        return expression.getValue(context, String.class);
+        String expressionValue;
+        try {
+            expressionValue = expression.getValue(context, String.class);
+        } catch (Exception e) {
+            expressionValue = JsonUtils.toJson(expression.getValue(context, Object.class));
+        }
+        log.info("[ spEl 解析内容 ]: {}", expressionValue);
+        return expressionValue;
     }
 
     public static Map<String, String> parseSpEls(Method method, Object[] args, String spEl) {
-        String[] params = Optional.ofNullable(parameterNameDiscoverer.getParameterNames(method)).orElse(new String[]{});//解析参数名
-        EvaluationContext context = new StandardEvaluationContext();//el解析需要的上下文对象
+        //解析参数名
+        String[] params = Optional.ofNullable(parameterNameDiscoverer.getParameterNames(method)).orElse(new String[]{});
+        //el解析需要的上下文对象
+        EvaluationContext context = new StandardEvaluationContext();
         for (int i = 0; i < params.length; i++) {
-            context.setVariable(params[i], args[i]);//所有参数都作为原材料扔进去
+            context.setVariable(params[i], args[i]);
         }
         String[] spElItem = spEl.split(",");
         Map<String, String> spELMap = new java.util.HashMap<>(spElItem.length);
         for (String item : spElItem) {
             Expression expression = parser.parseExpression(item);
-            spELMap.put(item, expression.getValue(context, String.class));
-            log.info("[ item - spEl 解析内容 ]:{} - {}", item, expression.getValue(context, String.class));
+            String expressionValue;
+            try {
+                expressionValue = expression.getValue(context, String.class);
+            } catch (Exception e) {
+                expressionValue = JsonUtils.toJson(expression.getValue(context, Object.class));
+            }
+            spELMap.put(item, expressionValue);
+            log.info("[ item - spEl 解析内容 ]:{} - {}", item, expressionValue);
         }
         return spELMap;
     }

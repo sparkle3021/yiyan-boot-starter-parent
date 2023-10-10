@@ -74,7 +74,7 @@ public class JsonUtils extends JSONUtil {
 
         objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         //null的属性不进行序列化
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         // 解决jackson2无法反序列化LocalDateTime的问题
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.registerModule(javaTimeModule);
@@ -95,7 +95,7 @@ public class JsonUtils extends JSONUtil {
         //时间读取为毫秒而非纳秒
         objectMapper.configure(DeserializationFeature.READ_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
         //是否输出空值字段
-        objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.ALWAYS);
+        objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
         //序列化时区
         objectMapper.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
         // NULL 值处理
