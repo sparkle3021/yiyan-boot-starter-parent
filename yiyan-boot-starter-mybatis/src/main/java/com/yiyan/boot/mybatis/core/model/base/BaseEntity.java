@@ -2,9 +2,9 @@ package com.yiyan.boot.mybatis.core.model.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -12,11 +12,9 @@ import java.time.LocalDateTime;
  *
  * @author MENGJIAO
  */
-@Data
-public class BaseEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
+@Getter
+@Setter
+public class BaseEntity {
     /**
      * 创建时间
      */

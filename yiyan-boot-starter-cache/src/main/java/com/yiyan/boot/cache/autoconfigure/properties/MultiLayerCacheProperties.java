@@ -143,7 +143,7 @@ public class MultiLayerCacheProperties {
         /**
          * 分布式缓存前置key
          */
-        private String cachePrefixKey = "multi-cache:redisson:";
+        private String cachePrefixKey = "";
     }
 
     /**

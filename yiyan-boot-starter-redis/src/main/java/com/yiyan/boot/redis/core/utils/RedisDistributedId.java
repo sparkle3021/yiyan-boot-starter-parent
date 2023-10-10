@@ -96,7 +96,23 @@ public class RedisDistributedId {
     /**
      * 基于Redisson 原子增长的方式生成分布式ID
      */
-    public long nextIdByIncrement(String idSegmentKey) {
+    public synchronized long nextIdByIncrement(String idSegmentKey) {
         return redissonClient.getAtomicLong(idSegmentKey).incrementAndGet();
+    }
+
+    /**
+     * 基于Redisson 原子增长的方式生成分布式ID,每天从0开始
+     */
+    public synchronized long nextIdByIncrementOnDay(String idSegmentKey) {
+        // 判断Redis中是否存在该key
+        if (!redissonClient.getAtomicLong(idSegmentKey).isExists()) {
+            // 不存在，设置为0
+            redissonClient.getAtomicLong(idSegmentKey).set(0);
+            // 设置过期时间为当天的最后一秒
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime endOfDay = now.withHour(23).withMinute(59).withSecond(59);
+            redissonClient.getAtomicLong(idSegmentKey).expireAt(endOfDay.toInstant(ZoneOffset.of("+8")).toEpochMilli());
+        }
+        return redissonClient.getAtomicLong(idSegmentKey).getAndIncrement();
     }
 }
