@@ -40,6 +40,11 @@ public class BasePageQuery<T> extends BasePage<T> implements Serializable {
      */
     private String sortOrder = "asc";
 
+    /**
+     * 查询条件
+     */
+    private List<QueryConditionParam> conditionFields;
+
     @Override
     public void setMaxLimit(Long maxLimit) {
         // 单页分页条数限制
