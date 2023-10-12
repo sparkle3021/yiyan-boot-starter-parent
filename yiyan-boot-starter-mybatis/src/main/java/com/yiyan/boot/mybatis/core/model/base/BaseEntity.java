@@ -2,8 +2,7 @@ package com.yiyan.boot.mybatis.core.model.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -12,8 +11,7 @@ import java.time.LocalDateTime;
  *
  * @author MENGJIAO
  */
-@Getter
-@Setter
+@Data
 public class BaseEntity {
     /**
      * 创建时间
