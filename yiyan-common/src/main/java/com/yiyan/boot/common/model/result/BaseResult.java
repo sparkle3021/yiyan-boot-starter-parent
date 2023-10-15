@@ -1,4 +1,4 @@
-package com.yiyan.boot.common.result;
+package com.yiyan.boot.common.model.result;
 
 import lombok.Data;
 

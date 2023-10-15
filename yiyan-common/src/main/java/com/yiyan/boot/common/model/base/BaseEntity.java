@@ -1,4 +1,4 @@
-package com.yiyan.boot.mybatis.core.model.base;
+package com.yiyan.boot.common.model.base;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

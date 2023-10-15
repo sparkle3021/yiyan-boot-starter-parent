@@ -1,4 +1,4 @@
-package com.yiyan.boot.common.result;
+package com.yiyan.boot.common.model.result;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.yiyan.boot.common.constant.ErrorCodeConstant;

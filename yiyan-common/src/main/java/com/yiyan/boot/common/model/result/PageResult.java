@@ -1,7 +1,7 @@
-package com.yiyan.boot.mybatis.core.model.result;
+package com.yiyan.boot.common.model.result;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.yiyan.boot.common.result.BaseResult;
+import com.yiyan.boot.common.utils.ObjectUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,7 +39,7 @@ public class PageResult<T> extends BaseResult {
         PageResultRecord<T> data = new PageResultRecord<>();
         data.setCurrent(result.getCurrent());
         data.setPageSize(result.getSize());
-        data.setTotal(result.getTotal());
+        data.setTotal(ObjectUtils.isNotEmpty(result.getTotal()) ? result.getTotal() : 0L);
         data.setRecords(result.getRecords());
         pageResult.setData(data);
         return pageResult;

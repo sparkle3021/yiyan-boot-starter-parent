@@ -357,4 +357,30 @@ public class StringUtils extends StrUtil {
         }
         return sb.toString();
     }
+
+    /**
+     * 下划线转驼峰
+     *
+     * @param input 输入字符串
+     * @return 下划线字符串
+     */
+    public static String convertCamelToUnderline(String input) {
+        if (StringUtils.isBlank(input)) {
+            return null;
+        }
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            char currentChar = input.charAt(i);
+
+            if (Character.isUpperCase(currentChar)) {
+                if (i > 0) {
+                    result.append('_');
+                }
+                result.append(Character.toLowerCase(currentChar));
+            } else {
+                result.append(currentChar);
+            }
+        }
+        return result.toString();
+    }
 }
