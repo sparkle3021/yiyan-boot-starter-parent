@@ -21,10 +21,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -35,27 +32,27 @@ import java.util.Set;
  * AOP切面，缓存拦截处理
  */
 @Aspect
-@Order(101)
 @Slf4j
-@Component
 @ConditionalOnProperty(name = "multi.cache.enable", havingValue = "true")
 public class CacheManagerAspect {
 
-    @Autowired
-    CacheService cacheService;
-
-    @Autowired
+    private CacheService cacheService;
     private MultiLayerCacheProperties cacheConfigProperties;
 
-    @Pointcut("execution(* com.yiyan..*.*(..)) && @annotation(com.yiyan.boot.cache.core.annotation.Cached)")
+    public CacheManagerAspect(CacheService cacheService, MultiLayerCacheProperties cacheConfigProperties) {
+        this.cacheService = cacheService;
+        this.cacheConfigProperties = cacheConfigProperties;
+    }
+
+    @Pointcut("@annotation(com.yiyan.boot.cache.core.annotation.Cached)")
     public void executionOfCachedMethod() {
     }
 
-    @Pointcut("execution(* com.yiyan..*.*(..)) && @annotation(com.yiyan.boot.cache.core.annotation.CachePut)")
+    @Pointcut("@annotation(com.yiyan.boot.cache.core.annotation.CachePut)")
     public void executionOfCachePutMethod() {
     }
 
-    @Pointcut("execution(* com.yiyan..*.*(..))  && @annotation(com.yiyan.boot.cache.core.annotation.CacheDelete)")
+    @Pointcut("@annotation(com.yiyan.boot.cache.core.annotation.CacheDelete)")
     public void executionOfCacheDeleteMethod() {
     }
 

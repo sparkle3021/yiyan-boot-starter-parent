@@ -77,66 +77,6 @@ public class MultiLayerCacheProperties {
     @Data
     public static class RemoteCache {
         /**
-         * Host
-         */
-        private String host = "localhost";
-        /**
-         * Port
-         */
-        private int port = 6379;
-        /**
-         * 密码
-         */
-        private String password = null;
-        /**
-         * 数据库
-         */
-        private int database = 0;
-        /**
-         * 最大连接数
-         */
-        private int maxActive = 8;
-        /**
-         * 最大空闲连接数
-         */
-        private int maxIdle = 8;
-        /**
-         * 最小空闲连接数
-         */
-        private int minIdle = 0;
-        /**
-         * 连接池最大连接数
-         */
-        private int poolMaxSize = 64;
-        /**
-         * 连接池最小空闲连接数
-         */
-        private int minIdleSize = 10;
-        /**
-         * 连接超时时间
-         */
-        private int timeout = 10000;
-        /**
-         * 最大等待时间
-         */
-        private int maxWait = 10000;
-        /**
-         * 是否集群
-         */
-        private boolean cluster = false;
-        /**
-         * 集群节点 格式：ip:port,ip:port
-         */
-        private String nodes = null;
-        /**
-         * 集群最大重定向次数
-         */
-        private int maxRedirects = 3;
-        /**
-         * 是否开启压缩
-         */
-        private boolean useCompression = false;
-        /**
          * 分布式缓存更新的的topic名称
          */
         private String topicName = "multi-cache:redisson:topic";

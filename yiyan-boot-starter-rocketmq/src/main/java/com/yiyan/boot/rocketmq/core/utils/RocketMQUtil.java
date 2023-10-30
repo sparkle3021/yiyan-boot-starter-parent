@@ -7,6 +7,7 @@ import com.yiyan.boot.rocketmq.core.model.MQMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.spring.core.RocketMQLocalRequestCallback;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,20 @@ public class RocketMQUtil<T> {
             Asserts.fail("ROCKETMQ 消息参数错误 ：destination 为空");
         }
         return destination;
+    }
+
+    private static SendCallback asyncSendCallback(String destination, String messageId) {
+        return new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("ROCKETMQ 异步消息发送成功 ： [{}] - [{}] - [{}]", destination, messageId, sendResult.getTransactionId());
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                log.error("ROCKETMQ 异步消息发送失败 ：[{}] - [{}] - [{}]", destination, messageId, throwable.getMessage());
+            }
+        };
     }
 
     /**
@@ -122,18 +137,17 @@ public class RocketMQUtil<T> {
         }
     }
 
-    private static SendCallback asyncSendCallback(String destination, String messageId) {
-        return new SendCallback() {
-            @Override
-            public void onSuccess(SendResult sendResult) {
-                log.info("ROCKETMQ 异步消息发送成功 ： [{}] - [{}] - [{}]", destination, messageId, sendResult.getTransactionId());
-            }
-
-            @Override
-            public void onException(Throwable throwable) {
-                log.error("ROCKETMQ 异步消息发送失败 ：[{}] - [{}] - [{}]", destination, messageId, throwable);
-            }
-        };
+    /**
+     * 发送同步消息，带回调函数
+     *
+     * @param messageBody                  消息体
+     * @param rocketMQLocalRequestCallback 回调函数
+     */
+    public void sendAndReceive(MQMessage<T> messageBody, RocketMQLocalRequestCallback<T> rocketMQLocalRequestCallback) {
+        String destination = checkDestination(messageBody.getDestination());
+        log.info("ROCKETMQ Receive消息发送 ：[{}] - [{}] - [{}]", destination, messageBody.getMessageId(), messageBody);
+        Message<T> message = MessageBuilder.withPayload(messageBody.getContent()).build();
+        rocketMQTemplate.sendAndReceive(destination, message, rocketMQLocalRequestCallback, messageBody.getHashKey(), timeout, messageBody.getDelayLevel().getLevel());
     }
 
     /**

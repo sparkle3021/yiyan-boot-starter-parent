@@ -58,10 +58,13 @@ public class MQMessage<T> {
 
     public static final String CONNECTOR = ":";
 
+    /**
+     * 获取消息目的地
+     * 默认使用：destination
+     * 如果topic不为空，则使用：topic:tag
+     * @return 消息目的地
+     */
     public String getDestination() {
-        if (StringUtils.isNotBlank(destination)) {
-            return destination;
-        }
         if (StringUtils.isNotBlank(topic)) {
             return topic + (StringUtils.isNotBlank(tag) ? (CONNECTOR + tag) : "");
         }

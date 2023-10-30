@@ -30,16 +30,10 @@
             <groupId>com.yiyan</groupId>
             <artifactId>yiyan-common</artifactId>
         </dependency>
-        <!-- Redis starter -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
         <!-- Redisson -->
         <dependency>
             <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>${redisson.version}</version>
+            <artifactId>redisson-spring-boot-starter</artifactId>
         </dependency>
         <!-- Redisson End -->
     </dependencies>

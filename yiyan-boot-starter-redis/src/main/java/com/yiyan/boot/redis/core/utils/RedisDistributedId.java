@@ -1,6 +1,7 @@
 package com.yiyan.boot.redis.core.utils;
 
 import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +24,7 @@ public class RedisDistributedId {
      */
     private static final long BEGIN_TIMESTAMP = 1659312000L;
 
-
-    @Resource(name = "redissonClient")
+    @Autowired
     private RedissonClient redissonClient;
 
     @Resource(name = "comRedisTemplate")

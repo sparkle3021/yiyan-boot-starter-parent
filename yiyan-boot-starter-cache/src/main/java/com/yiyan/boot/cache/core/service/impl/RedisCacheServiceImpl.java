@@ -4,6 +4,7 @@ import com.yiyan.boot.cache.core.service.CacheService;
 import com.yiyan.boot.common.exception.Asserts;
 import com.yiyan.boot.common.utils.ObjectUtils;
 import com.yiyan.boot.common.utils.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBatch;
 import org.redisson.api.RMapCache;
 import org.redisson.api.RMapCacheAsync;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @author MENGJIAO
  * @createDate 2023-09-28 下午 02:39
  */
+@Slf4j
 public class RedisCacheServiceImpl implements CacheService {
 
     private final RedissonClient redissonClient;
