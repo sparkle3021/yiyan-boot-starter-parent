@@ -15,6 +15,11 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- 通用组件 -->
+        <dependency>
+            <groupId>com.yiyan</groupId>
+            <artifactId>yiyan-common</artifactId>
+        </dependency>
         <!-- 自动配置 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -24,11 +29,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
-        </dependency>
-        <!-- 通用组件 -->
-        <dependency>
-            <groupId>com.yiyan</groupId>
-            <artifactId>yiyan-common</artifactId>
         </dependency>
         <!-- Mybatis -->
         <dependency>
@@ -42,8 +42,8 @@
         </dependency>
         <!-- JDBC Start -->
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>

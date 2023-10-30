@@ -35,7 +35,7 @@ public class RedisCacheServiceImpl implements CacheService {
     }
 
     @Override
-    public Object getFromCache(String cacheName, Object cacheKey) {
+    public Object getFromCache(String cacheName, Object cacheKey, long... ttl) {
         if (StringUtils.isBlank(cacheName) || cacheKey == null) {
             Asserts.fail("缓存KEY或缓存名称不能为空！");
         }

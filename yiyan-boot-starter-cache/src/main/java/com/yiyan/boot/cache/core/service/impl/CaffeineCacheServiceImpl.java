@@ -62,7 +62,7 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
      *
      * @return
      */
-    public Cache<Object, Object> caffeineCacheInit() {
+    public Cache<Object, Object> caffeineCacheInit(long ttl) {
         MultiLayerCacheProperties.LocalCache cacheConfigProperties = multiLayerCacheProperties.getLocalCache();
 
         Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
@@ -75,22 +75,11 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
         if (cacheConfigProperties.getMaximumSize() > 0) {
             cacheBuilder.maximumSize(cacheConfigProperties.getMaximumSize());
         }
-        // 设置缓存最后一次写入或访问后经过固定时间过期
-        if (cacheConfigProperties.getExpireAfterAccess() > 0) {
-            cacheBuilder.expireAfterAccess(cacheConfigProperties.getExpireAfterAccess(), TimeUnit.MILLISECONDS);
-        }
         // 设置缓存最后一次写入后经过固定时间过期
-        if (cacheConfigProperties.getExpireAfterWrite() > 0) {
-            cacheBuilder.expireAfterWrite(cacheConfigProperties.getExpireAfterWrite(), TimeUnit.MILLISECONDS);
+        if (ttl > 0) {
+            cacheBuilder.expireAfterWrite(ttl, TimeUnit.MILLISECONDS);
         }
-        Cache<Object, Object> build = cacheBuilder.build();
-        // 在写入后刷新缓存的时间
-        if (cacheConfigProperties.getRefreshAfterWrite() > 0) {
-            cacheBuilder.refreshAfterWrite(cacheConfigProperties.getRefreshAfterWrite(), TimeUnit.MILLISECONDS);
-            build = cacheBuilder.build(cacheLoader());
-        }
-
-        return build;
+        return cacheBuilder.build();
     }
 
 
@@ -128,9 +117,9 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
      * @param cacheNames 缓存名称
      * @param key        缓存key
      */
-    private void saveAndSend(String[] cacheNames, Object key, Object cacheValue) {
+    private void saveAndSend(String[] cacheNames, Object key, long ttl, Object cacheValue) {
         for (String cacheName : cacheNames) {
-            saveAndSend(cacheName, key, cacheValue, false);
+            saveAndSend(cacheName, key, cacheValue, ttl, false);
         }
         // 发送Redis缓存更新消息, 所有cacheNames统一发送
         redisSendService.sendMessage(cacheNames, key);
@@ -156,11 +145,11 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
      * @param cacheName 缓存名称
      * @param key       缓存key
      */
-    private void saveAndSend(String cacheName, Object key, Object value, boolean isNeedSend) {
+    private void saveAndSend(String cacheName, Object key, Object value, long ttl, boolean isNeedSend) {
         // 获取缓存对象
         Cache caffeineCache = cacheMap.get(cacheName);
         if (caffeineCache == null) {
-            caffeineCache = caffeineCacheInit();
+            caffeineCache = caffeineCacheInit(ttl);
             cacheMap.putIfAbsent(cacheName, caffeineCache);
         }
         caffeineCache.put(key, value);
@@ -180,11 +169,11 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
      * @param result        缓存值
      * @param caffeineCache 缓存对象
      */
-    private void saveCaffeineCache(String cacheName, Object cacheKey, Object result, Cache caffeineCache) {
+    private void saveCaffeineCache(String cacheName, Object cacheKey, Object result, long ttl, Cache caffeineCache) {
         if (null != result) {
             // 获取缓存对象
             if (caffeineCache == null) {
-                caffeineCache = caffeineCacheInit();
+                caffeineCache = caffeineCacheInit(ttl);
                 cacheMap.putIfAbsent(cacheName, caffeineCache);
             }
             caffeineCache.put(cacheKey, result);
@@ -192,7 +181,7 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     }
 
     @Override
-    public Object getFromCache(String cacheName, Object cacheKey) {
+    public Object getFromCache(String cacheName, Object cacheKey, long... ttl) {
         Object cacheObj = null;
         Cache caffeineCache = cacheMap.get(cacheName);
         if (ObjectUtils.isNotNull(caffeineCache)) {
@@ -204,7 +193,7 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
             cacheObj = cacheService.getFromCache(cacheName, cacheKey);
             if (ObjectUtils.isNotNull(cacheObj)) {
                 // 保存至Caffeine缓存
-                saveCaffeineCache(cacheName, cacheKey, cacheObj, caffeineCache);
+                saveCaffeineCache(cacheName, cacheKey, cacheObj, ttl[0], caffeineCache);
             }
         }
         return cacheObj;
@@ -214,7 +203,7 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     public boolean save(String[] cacheNames, Object cacheKey, Object cacheValue, long ttl) {
         boolean result = super.save(cacheNames, cacheKey, cacheValue, ttl);
         // 保存至Caffeine缓存,并发送Redis缓存更新消息
-        saveAndSend(cacheNames[0], cacheKey, cacheValue, true);
+        saveAndSend(cacheNames[0], cacheKey, cacheValue, ttl, true);
         return result;
     }
 
@@ -266,7 +255,7 @@ public class CaffeineCacheServiceImpl extends MultiCacheServiceImpl {
     public boolean saveInRedisAsync(String[] cacheNames, Object cacheKey, Object cacheValue, long ttl) {
         boolean result = super.saveInRedisAsync(cacheNames, cacheKey, cacheValue, ttl);
         // 保存至Caffeine缓存,并发送Redis缓存更新消息
-        saveAndSend(cacheNames, cacheKey, cacheValue);
+        saveAndSend(cacheNames, cacheKey, ttl, cacheValue);
         return result;
     }
 

@@ -43,6 +43,6 @@ public class RedisSendServiceImpl implements RedisSendService {
     public void sendMessage(String[] cacheNames, Object key) {
         RTopic rTopic = redissonClient.getTopic(topicName);
         long receiveCount = rTopic.publish(new CacheMessage(cacheNames, key));
-        log.info("[缓存] - [缓存更新通知发送] - 接收者数量：{}", receiveCount);
+        log.debug("[缓存] - [缓存更新通知发送] - 接收者数量：{}", receiveCount);
     }
 }

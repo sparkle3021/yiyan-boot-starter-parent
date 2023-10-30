@@ -1,7 +1,6 @@
 package com.yiyan.boot.cache.autoconfigure;
 
 import com.yiyan.boot.cache.autoconfigure.properties.MultiLayerCacheProperties;
-import com.yiyan.boot.cache.core.aspect.CacheManagerAspect;
 import com.yiyan.boot.cache.core.config.NamedThreadFactory;
 import com.yiyan.boot.cache.core.listener.CacheMessageListener;
 import com.yiyan.boot.cache.core.model.CacheMessage;
@@ -49,8 +48,8 @@ public class MultiLayerCacheAutoConfiguration {
     @Bean(name = "cacheAsyncExecutor")
     @ConditionalOnMissingBean
     public ExecutorService cacheAsyncExecutor(MultiLayerCacheProperties cacheConfigProperties) {
-        log.info("[缓存] - [初始化异步缓存线程池]");
-        log.info("[缓存] - [缓存异步线程池配置]：{}", cacheConfigProperties.getAsyncExecutor());
+        log.debug("[缓存] - [初始化异步缓存线程池]");
+        log.debug("[缓存] - [缓存异步线程池配置]：{}", cacheConfigProperties.getAsyncExecutor());
         ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(
                 cacheConfigProperties.getAsyncExecutor().getCorePoolSize(),
                 cacheConfigProperties.getAsyncExecutor().getMaxPoolSize(),
@@ -59,7 +58,7 @@ public class MultiLayerCacheAutoConfiguration {
                 new ArrayBlockingQueue<>(cacheConfigProperties.getAsyncExecutor().getQueueCapacity()),
                 new NamedThreadFactory(cacheConfigProperties.getAsyncExecutor().getThreadNamePrefix()));
         poolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardOldestPolicy());
-        log.info("[缓存] - [缓存异步线程池初始化成功]");
+        log.debug("[缓存] - [缓存异步线程池初始化成功]");
         return poolExecutor;
     }
 
@@ -72,10 +71,10 @@ public class MultiLayerCacheAutoConfiguration {
      */
     @Bean
     public RedisSendService redisSendService(RedissonClient redissonClient, MultiLayerCacheProperties cacheConfigProperties) {
-        log.info("[缓存] - [初始化Redis缓存更新消息发布服务]");
-        log.info("[缓存] - [Redis 缓存更新消息发布TOPIC]：{}", cacheConfigProperties.getRemoteCache().getTopicName());
+        log.debug("[缓存] - [初始化Redis缓存更新消息发布服务]");
+        log.debug("[缓存] - [Redis 缓存更新消息发布TOPIC]：{}", cacheConfigProperties.getRemoteCache().getTopicName());
         RedisSendServiceImpl redisSendService = new RedisSendServiceImpl(redissonClient, cacheConfigProperties.getRemoteCache().getTopicName());
-        log.info("[缓存] - [Redis 缓存更新消息发布服务初始化成功]");
+        log.debug("[缓存] - [Redis 缓存更新消息发布服务初始化成功]");
         return redisSendService;
     }
 
@@ -94,8 +93,8 @@ public class MultiLayerCacheAutoConfiguration {
                                           RedisSendService redisSendService,
                                           ExecutorService cacheAsyncExecutor,
                                           MultiLayerCacheProperties cacheConfigProperties) {
-        log.info("[缓存] - [初始化多级缓存服务]");
-        log.info("[缓存] - 二级缓存开启状态：{}", cacheConfigProperties.isSecondCacheEnable());
+        log.debug("[缓存] - [初始化多级缓存服务]");
+        log.debug("[缓存] - 二级缓存开启状态：{}", cacheConfigProperties.isSecondCacheEnable());
         CacheService cacheService = null;
         // 判断是否开启二级缓存
         RedisCacheServiceImpl redisCacheService = new RedisCacheServiceImpl(redissonClient, cacheAsyncExecutor, cacheConfigProperties.getRemoteCache().getCachePrefixKey());
@@ -104,7 +103,7 @@ public class MultiLayerCacheAutoConfiguration {
         } else {
             cacheService = redisCacheService;
         }
-        log.info("[缓存] - [多级缓存服务初始化成功]");
+        log.debug("[缓存] - [多级缓存服务初始化成功]");
         return cacheService;
     }
 
@@ -120,20 +119,12 @@ public class MultiLayerCacheAutoConfiguration {
     @Bean
     @ConditionalOnBean(CacheService.class)
     public RTopic subscribe(RedissonClient redissonClient, CacheService caffeineCacheService, MultiLayerCacheProperties cacheConfigProperties) {
-        log.info("[缓存] - [初始化Redis缓存更新消息订阅监听]");
-        log.info("[缓存] - [Redis 缓存更新消息订阅TOPIC]：{}", cacheConfigProperties.getRemoteCache().getTopicName());
+        log.debug("[缓存] - [初始化Redis缓存更新消息订阅监听]");
+        log.debug("[缓存] - [Redis 缓存更新消息订阅TOPIC]：{}", cacheConfigProperties.getRemoteCache().getTopicName());
         RTopic rTopic = redissonClient.getTopic(cacheConfigProperties.getRemoteCache().getTopicName());
         CacheMessageListener messageListener = new CacheMessageListener((CaffeineCacheServiceImpl) caffeineCacheService);
         rTopic.addListener(CacheMessage.class, messageListener);
-        log.info("[缓存] - [Redis 缓存更新消息订阅监听初始化成功]");
+        log.debug("[缓存] - [Redis 缓存更新消息订阅监听初始化成功]");
         return rTopic;
-    }
-
-    @Bean
-    @ConditionalOnBean(CacheService.class)
-    public CacheManagerAspect cacheManagerAspect(
-            CacheService cacheService,
-            MultiLayerCacheProperties cacheConfigProperties) {
-        return new CacheManagerAspect(cacheService, cacheConfigProperties);
     }
 }

@@ -12,9 +12,10 @@ public interface CacheService {
      *
      * @param cacheName 缓存名称
      * @param cacheKey  缓存KEY
+     * @param ttl       缓存时间，在进行LocalCache存储时用到
      * @return 缓存数据
      */
-    Object getFromCache(String cacheName, Object cacheKey);
+    Object getFromCache(String cacheName, Object cacheKey, long... ttl);
 
     /**
      * 缓存数据

@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -26,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 @Aspect
 @Component
 // 确保比事务注解先执行，分布式锁在事务外
-//@Order(0)
+@Order(0)
 public class RedissonLockAspect {
 
     @Autowired

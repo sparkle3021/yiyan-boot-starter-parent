@@ -59,19 +59,6 @@ public class MultiLayerCacheProperties {
          * 最大容量
          */
         private int maximumSize = -1;
-        /**
-         * 最后写过后过期时间 单位：秒
-         */
-        private int expireAfterWrite = -1;
-        /**
-         * 最后一次读或写操作后经过指定时间过期 单位：秒
-         */
-        private int expireAfterAccess = -1;
-        /**
-         * 写入后多久刷新 单位：秒
-         */
-        private int refreshAfterWrite = -1;
-
     }
 
     @Data

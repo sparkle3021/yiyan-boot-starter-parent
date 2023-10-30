@@ -21,7 +21,9 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -33,10 +35,13 @@ import java.util.Set;
  */
 @Aspect
 @Slf4j
+@Component
 @ConditionalOnProperty(name = "multi.cache.enable", havingValue = "true")
 public class CacheManagerAspect {
 
+    @Autowired
     private CacheService cacheService;
+    @Autowired
     private MultiLayerCacheProperties cacheConfigProperties;
 
     public CacheManagerAspect(CacheService cacheService, MultiLayerCacheProperties cacheConfigProperties) {
@@ -243,7 +248,7 @@ public class CacheManagerAspect {
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
         }
-        log.info("[缓存] - [查询/保存] - [解析缓存KEY] : {}", key);
+        log.debug("[缓存] - [查询/保存] - [解析缓存KEY] : {}", key);
         return key.toString();
     }
 
@@ -271,7 +276,7 @@ public class CacheManagerAspect {
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
         }
-        log.info("[缓存] - [更新] - [解析缓存KEY] : {}", key);
+        log.debug("[缓存] - [更新] - [解析缓存KEY] : {}", key);
         return key.toString();
     }
 
@@ -299,7 +304,7 @@ public class CacheManagerAspect {
         for (String string : strings) {
             key.append(stringStringMap.get(string)).append(":");
         }
-        log.info("[缓存] - [移除] - [解析缓存KEY] : {}", key);
+        log.debug("[缓存] - [移除] - [解析缓存KEY] : {}", key);
         return key.toString();
     }
 

@@ -16,7 +16,7 @@ public abstract class MultiCacheServiceImpl implements CacheService {
     }
 
     @Override
-    public Object getFromCache(String cacheName, Object cacheKey) {
+    public Object getFromCache(String cacheName, Object cacheKey, long... ttl) {
         return cacheService.getFromCache(cacheName, cacheKey);
     }
 
