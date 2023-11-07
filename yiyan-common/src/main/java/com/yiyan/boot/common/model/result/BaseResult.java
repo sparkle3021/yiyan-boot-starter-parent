@@ -2,6 +2,8 @@ package com.yiyan.boot.common.model.result;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 基础返回实体
  *
@@ -9,7 +11,10 @@ import lombok.Data;
  * @time 2020/11/13 13:17
  */
 @Data
-public class BaseResult {
+public class BaseResult implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * httpCode
      */

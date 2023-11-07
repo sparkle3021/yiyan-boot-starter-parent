@@ -2,7 +2,7 @@ package com.yiyan.boot.redis.core.config;
 
 
 import com.yiyan.boot.common.utils.json.JsonUtils;
-import com.yiyan.boot.redis.core.utils.RedisUtil;
+import com.yiyan.boot.redis.core.service.RedisService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * @author MENGJIAO
  * @createDate 2022/11/24
  */
-@Import({RedisUtil.class})
+@Import({RedisService.class})
 @Configuration
 public class RedisTemplateConfig {
 

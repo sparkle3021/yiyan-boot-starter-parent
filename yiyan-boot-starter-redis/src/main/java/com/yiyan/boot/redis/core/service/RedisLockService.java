@@ -1,4 +1,4 @@
-package com.yiyan.boot.redis.core.utils;
+package com.yiyan.boot.redis.core.service;
 
 
 import com.yiyan.boot.common.enums.ErrorCodeEnum;
@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class RedisLockUtil {
+public class RedisLockService {
 
     private final RedissonClient redissonClient;
 
@@ -200,7 +200,7 @@ public class RedisLockUtil {
             Asserts.fail(ErrorCodeEnum.LOCK_ERROR);
         }
         try {
-            return supplier.get();//执行锁内的代码逻辑
+            return supplier.execute();//执行锁内的代码逻辑
         } finally {
             if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                 lock.unlock();
@@ -218,14 +218,11 @@ public class RedisLockUtil {
         return executeWithLock(key, -1, TimeUnit.MILLISECONDS, supplier);
     }
 
+    /**
+     * 函数式接口，用于执行锁内的代码逻辑
+     */
     @FunctionalInterface
     public interface SupplierThrow<T> {
-
-        /**
-         * Gets a result.
-         *
-         * @return a result
-         */
-        T get() throws Throwable;
+        T execute() throws Throwable;
     }
 }

@@ -3,7 +3,7 @@ package com.yiyan.boot.redis.core.aspect;
 import cn.hutool.core.util.StrUtil;
 import com.yiyan.boot.common.utils.SpElUtils;
 import com.yiyan.boot.redis.core.annotation.RedissonLock;
-import com.yiyan.boot.redis.core.utils.RedisLockUtil;
+import com.yiyan.boot.redis.core.service.RedisLockService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class RedissonLockAspect {
 
     @Autowired
-    private RedisLockUtil redisLockUtil;
+    private RedisLockService redisLockService;
 
     @Pointcut("@annotation(com.yiyan.boot.redis.core.annotation.RedissonLock)")
     public void lockPointcut() {
@@ -46,6 +46,6 @@ public class RedissonLockAspect {
         String key = prefix + ":" + SpElUtils.parseSpEl(method, joinPoint.getArgs(), redissonLock.key());
         int waitTime = redissonLock.waitTime();
         TimeUnit timeUnit = redissonLock.unit();
-        return redisLockUtil.executeWithLockThrows(key, waitTime, timeUnit, joinPoint::proceed);
+        return redisLockService.executeWithLockThrows(key, waitTime, timeUnit, joinPoint::proceed);
     }
 }

@@ -100,7 +100,7 @@ public class CacheManagerAspect {
                 cacheKey = parseAndGetCacheKeyFromExpression(generateOriginalCachedKey(proceedingJoinPoint, cachedAnnotation));
             }
             // 从缓存中获取数据
-            returnObject = cacheService.getFromCache(cachedAnnotation.cacheName(), cacheKey);
+            returnObject = cacheService.getFromCache(cachedAnnotation.cacheName(), cacheKey, cachedAnnotation.ttl());
         } catch (Exception e) {
             log.error("[缓存] - [获取缓存] - 异常 ：" + e.getMessage(), e);
         }

@@ -46,46 +46,45 @@ spring:
 `API 式使用`
 
 ```java
-import com.yiyan.boot.redis.core.utils.RedisLockUtil;
+import com.yiyan.boot.redis.core.service.RedisLockService;
 import org.redisson.api.RLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Component
 public class TestClass {
 
-    @Autowired
-    private RedisLockUtil redisLockUtil;
+     @Autowired
+     private RedisLockService redisLockUtil;
 
-    private static final String LOCK_KET = "redisson:lock:xxx";
+     private static final String LOCK_KET = "redisson:lock:xxx";
 
-    /**
-     * 不可重入锁
-     */
-    public void redisLockApi1() {
-        RLock lock = redisLockUtil.getLock(LOCK_KET);
-        try {
-            lock.lock();
-            // do something
-        } finally {
-            lock.unlock();
-        }
-    }
+     /**
+      * 不可重入锁
+      */
+     public void redisLockApi1() {
+          RLock lock = redisLockUtil.getLock(LOCK_KET);
+          try {
+               lock.lock();
+               // do something
+          } finally {
+               lock.unlock();
+          }
+     }
 
-    /**
-     * 可重入锁
-     */
-    public void redisLockApi2() {
-        RLock lock = redisLockUtil.getLock(LOCK_KET);
-        try {
-            if (lock.tryLock()) {
-                // do something
-            }
-        } finally {
-            lock.unlock();
-        }
-    }
+     /**
+      * 可重入锁
+      */
+     public void redisLockApi2() {
+          RLock lock = redisLockUtil.getLock(LOCK_KET);
+          try {
+               if (lock.tryLock()) {
+                    // do something
+               }
+          } finally {
+               lock.unlock();
+          }
+     }
 }
 ```
 
@@ -123,8 +122,9 @@ public class TestClass {
 > 2. `API 式使用`： 可以根据业务场景选择不同的加锁方式。`注解式使用`： 只能使用默认的加锁方式。
 
 ### 分布式Id的使用
+
 ```java
-import com.yiyan.boot.redis.core.utils.RedisDistributedId;
+import com.yiyan.boot.redis.core.service.RedisDistributedId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

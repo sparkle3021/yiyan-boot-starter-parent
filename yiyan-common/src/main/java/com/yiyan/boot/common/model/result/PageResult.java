@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,13 +17,17 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class PageResult<T> extends BaseResult {
+public class PageResult<T> extends BaseResult implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     private PageResultRecord<T> data;
 
     @Data
-    public static class PageResultRecord<T> {
+    public static class PageResultRecord<T> implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
         private Long current;
 
         private Long pageSize;

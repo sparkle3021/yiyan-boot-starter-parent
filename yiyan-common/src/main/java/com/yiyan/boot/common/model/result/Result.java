@@ -5,13 +5,17 @@ import com.yiyan.boot.common.constant.ErrorCodeConstant;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * 返回实体
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Result<T> extends BaseResult {
+public class Result<T> extends BaseResult implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private T data;
 

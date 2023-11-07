@@ -1,5 +1,6 @@
-package com.yiyan.boot.redis.core.utils;
+package com.yiyan.boot.redis.core.service;
 
+import lombok.RequiredArgsConstructor;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,6 +18,7 @@ import java.time.format.DateTimeFormatter;
  * @createDate 2023-05-15 14:37
  */
 @Component
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class RedisDistributedId {
 
     /**
@@ -24,8 +26,7 @@ public class RedisDistributedId {
      */
     private static final long BEGIN_TIMESTAMP = 1659312000L;
 
-    @Autowired
-    private RedissonClient redissonClient;
+    private final RedissonClient redissonClient;
 
     @Resource(name = "comRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
