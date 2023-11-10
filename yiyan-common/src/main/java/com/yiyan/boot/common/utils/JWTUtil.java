@@ -1,6 +1,8 @@
 package com.yiyan.boot.common.utils;
 
+import com.yiyan.boot.common.utils.encrypt.RASUtil;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Data;
@@ -8,6 +10,7 @@ import lombok.Data;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * JWT工具类
@@ -72,21 +75,99 @@ public class JWTUtil {
      * 生成 Token
      *
      * @param subject        主题
-     * @param ExpirationTime 过期时间
+     * @param expirationTime 过期时间
      * @return Token
      */
-    public static String generateToken(String subject, long ExpirationTime) {
+    public static String generateToken(String subject, long expirationTime) {
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + ExpirationTime * 1000);
+        Date expiration = new Date(now.getTime() + expirationTime * 1000);
 
         return Jwts.builder()
+                .signWith(CONFIG.getSignatureAlgorithm(), CONFIG.getSecretKey())
                 .setSubject(subject)
                 .setIssuer(CONFIG.getIssuer())
                 .setAudience(CONFIG.getAudience())
                 .setIssuedAt(now)
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, CONFIG.getSecretKey())
                 .compact();
+    }
+
+    /**
+     * 生成 Token
+     *
+     * @param subject        主题
+     * @param payload        自定义载荷
+     * @param expirationTime 过期时间
+     * @return Token
+     */
+    public static String generateToken(String subject, Map<String, Object> payload, long expirationTime) {
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + expirationTime * 1000);
+
+        JwtBuilder jwtBuilder = Jwts.builder()
+                .signWith(CONFIG.getSignatureAlgorithm(), CONFIG.getSecretKey())
+                .setSubject(subject)
+                .setIssuer(CONFIG.getIssuer())
+                .setAudience(CONFIG.getAudience())
+                .setIssuedAt(now)
+                .setExpiration(expiration);
+        jwtBuilder.addClaims(payload);
+        return jwtBuilder.compact();
+    }
+
+    /**
+     * 生成 Token
+     *
+     * @param subject 主题
+     * @param payload 自定义载荷
+     * @return Token
+     */
+    public static String generateToken(String subject, Map<String, Object> payload) {
+        return generateToken(subject, payload, CONFIG.getExpirationTime());
+    }
+
+    /**
+     * 生成 Token
+     *
+     * @param payload 自定义载荷
+     * @return Token
+     */
+    public static String generateToken(Map<String, Object> payload) {
+        return generateToken(null, payload, CONFIG.getExpirationTime());
+    }
+
+    /**
+     * 生成 Token
+     *
+     * @param payload        自定义载荷
+     * @param expirationTime 过期时间
+     * @return Token
+     */
+    public static String generateToken(Map<String, Object> payload, long expirationTime) {
+        return generateToken(null, payload, expirationTime);
+    }
+
+
+    /**
+     * 加密token
+     *
+     * @param token     token
+     * @param secretKey 密钥
+     * @return 加密后的token
+     */
+    public static String encodeToken(String token, String secretKey) {
+        return RASUtil.rasEncode(secretKey, token);
+    }
+
+    /**
+     * 解密token
+     *
+     * @param token     token
+     * @param secretKey 密钥
+     * @return 解密后的token
+     */
+    public static String decodeToken(String token, String secretKey) {
+        return RASUtil.rasDecode(secretKey, token);
     }
 
     /**
@@ -155,7 +236,7 @@ public class JWTUtil {
     }
 
     @Data
-    private static class JwtConfig {
+    public static class JwtConfig {
         /**
          * 签发者
          */
