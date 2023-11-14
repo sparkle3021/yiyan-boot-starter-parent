@@ -16,7 +16,7 @@ import java.util.Map;
  * Elasticsearch 查询参数
  *
  * @author Sparkler
- * @createDate 2023/1/7
+ * @createDate 2023-01-07
  */
 @Data
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class EsQueryParam implements Serializable {
     /**
      * 设置默认返回数据大小，Elasticsearch 默认返回10条
      */
-    private final PageRequest DEFAULT_PAGE = PageRequest.of(0, 20);
+    private final PageRequest DEFAULT_PAGE = PageRequest.of(0, 10);
 
     /**
      * 单字段查询

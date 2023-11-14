@@ -3,14 +3,15 @@ package com.yiyan.boot.elasticsearch.core.utils;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
+import com.alibaba.excel.util.StringUtils;
+import com.yiyan.boot.elasticsearch.core.constant.EsConstant;
 import com.yiyan.boot.elasticsearch.core.enums.EsBoolEnum;
 import com.yiyan.boot.elasticsearch.core.enums.EsQueryBuilderEnum;
 import com.yiyan.boot.elasticsearch.core.enums.RangeEnum;
-import com.yiyan.boot.elasticsearch.core.model.EsQueryParam;
-import com.yiyan.boot.elasticsearch.core.model.EsResult;
-import com.yiyan.boot.elasticsearch.core.constant.EsConstant;
 import com.yiyan.boot.elasticsearch.core.model.EsBoolQueryParam;
+import com.yiyan.boot.elasticsearch.core.model.EsQueryParam;
 import com.yiyan.boot.elasticsearch.core.model.EsRangeParam;
+import com.yiyan.boot.elasticsearch.core.model.EsResult;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -46,7 +47,7 @@ public class ElasticSearchUtil {
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     /**
-     * Instantiates a new Elastic search util.
+     * 初始化
      *
      * @param elasticsearchRestTemplate the elasticsearch rest template
      */
@@ -57,11 +58,87 @@ public class ElasticSearchUtil {
     // =================================== 插入或更新数据 ===================================
 
     /**
+     * 拼接高亮条件
+     */
+    private static void appendHighlight(@NotNull EsQueryParam searchParam, NativeSearchQueryBuilder nativeSearchQueryBuilder) {
+        if (CollUtil.isNotEmpty(searchParam.getHighlightFields())) {
+            String preTag = StringUtils.isNotBlank(searchParam.getPreTags()) ? searchParam.getPreTags() : EsConstant.DEFAULT_PRE_TAG;
+            String postTag = StringUtils.isNotBlank(searchParam.getPostTags()) ? searchParam.getPostTags() : EsConstant.DEFAULT_POST_TAG;
+            List<HighlightBuilder.Field> highlightFields = new ArrayList<>(searchParam.getHighlightFields().size());
+            for (String highlightField : searchParam.getHighlightFields()) {
+                highlightFields.add(new HighlightBuilder.Field(highlightField).preTags(preTag).postTags(postTag));
+            }
+            nativeSearchQueryBuilder.withHighlightFields(highlightFields);
+        }
+    }
+
+    /**
+     * 构建全匹配查询 - Filed - Content
+     */
+    @NotNull
+    private static TermQueryBuilder termQueryBuilder(@NotNull EsQueryParam searchParam) {
+        return QueryBuilders.termQuery(searchParam.getField().concat(EsConstant.KEYWORD_QUERY), searchParam.getContent());
+    }
+
+    /**
+     * 构建全匹配查询 - Filed - Contents
+     */
+    @NotNull
+    private static TermsQueryBuilder termsQueryBuilder(@NotNull EsQueryParam searchParam) {
+        return QueryBuilders.termsQuery(searchParam.getField().concat(EsConstant.KEYWORD_QUERY), searchParam.getContents());
+    }
+
+    /**
+     * 构建匹配查询
+     */
+    private static QueryStringQueryBuilder queryStringQueryBuilder(@NotNull EsQueryParam searchParam) {
+        return QueryBuilders.queryStringQuery(String.valueOf(searchParam.getContent())).field(searchParam.getField());
+    }
+
+    // =================================== 更新数据 ===================================
+
+    /**
+     * 构建模糊查询
+     */
+    @NotNull
+    private static WildcardQueryBuilder wildcardQuery(@NotNull EsQueryParam searchParam) {
+        return QueryBuilders.wildcardQuery(searchParam.getField().concat(EsConstant.KEYWORD_QUERY), String.valueOf(searchParam.getContent()));
+    }
+
+    // =================================== 删除数据 ===================================
+
+    /**
+     * 构建范围查询
+     */
+    @NotNull
+    private static RangeQueryBuilder rangeQueryBuilder(@NotNull EsQueryParam searchParam) {
+        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(searchParam.getField());
+        List<EsRangeParam> rangeParams = searchParam.getEsRangeParam();
+        for (EsRangeParam rangeParam : rangeParams) {
+            rangeQueryTarget(rangeQueryBuilder, rangeParam.getValue(), rangeParam.getRange());
+        }
+        return rangeQueryBuilder;
+    }
+
+    /**
+     * 构建多匹配查询
+     */
+    @NotNull
+    private static MultiMatchQueryBuilder multiMatchQueryBuilder(@NotNull EsQueryParam searchParam) {
+        // 拼接查询字段
+        String[] fields = searchParam.getFields().toArray(new String[0]);
+        MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getContent(), fields);
+        if (ObjUtil.isNotEmpty(searchParam.getOperator())) {
+            multiMatchQueryBuilder.operator(searchParam.getOperator());
+        }
+        return multiMatchQueryBuilder;
+    }
+
+    /**
      * 插入单条数据
      *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the string
+     * @param data 索引数据
+     * @return 执行结果
      */
     public <T> T saveOrUpdate(T data) {
         return elasticsearchRestTemplate.save(data, getIndexCoordinates(data.getClass()));
@@ -70,9 +147,8 @@ public class ElasticSearchUtil {
     /**
      * 批量插入数据
      *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the list
+     * @param data 索引数据
+     * @return ES查询结果
      */
     public <T> Integer saveOrUpdate(Collection<T> data) {
         elasticsearchRestTemplate.save(data);
@@ -82,9 +158,8 @@ public class ElasticSearchUtil {
     /**
      * 批量插入数据
      *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the list
+     * @param data 索引数据
+     * @return ES查询结果
      */
     public <T> Integer saveOrUpdate(T[] data) {
         return saveOrUpdate(Arrays.asList(data));
@@ -93,9 +168,8 @@ public class ElasticSearchUtil {
     /**
      * 批量插入数据
      *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the list
+     * @param data 索引数据
+     * @return ES查询结果
      */
     public <T> Integer saveOrUpdate(Iterator<T> data) {
         ArrayList<T> collect = new ArrayList<>();
@@ -103,106 +177,16 @@ public class ElasticSearchUtil {
         return saveOrUpdate(collect);
     }
 
-    // =================================== 更新数据 ===================================
+    // =================================== 查询 ===================================
 
     /**
      * 更新单条数据
      *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the string
+     * @param data 索引数据
+     * @return 执行结果
      */
     public <T> T update(T data) {
         return elasticsearchRestTemplate.save(data, getIndexCoordinates(data.getClass()));
-    }
-
-    // =================================== 删除数据 ===================================
-
-    /**
-     * 删除单条数据
-     *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the string
-     */
-    public <T> String delete(T data) {
-        return elasticsearchRestTemplate.delete(data);
-    }
-
-    /**
-     * 批量删除数据
-     *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the list
-     */
-    public <T> Integer delete(Collection<T> data) {
-        data.forEach(this::delete);
-        return data.size();
-    }
-
-    /**
-     * 批量删除数据
-     *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the list
-     */
-    public <T> Integer delete(T[] data) {
-        return delete(Arrays.asList(data));
-    }
-
-    /**
-     * 批量删除数据
-     *
-     * @param <T>  the type parameter
-     * @param data the data
-     * @return the list
-     */
-    public <T> Integer delete(Iterator<T> data) {
-        ArrayList<T> collect = new ArrayList<>();
-        data.forEachRemaining(collect::add);
-        return delete(collect);
-    }
-
-    /**
-     * 根据id删除数据
-     *
-     * @param <T>   the type parameter
-     * @param id    the id
-     * @param clazz the clazz
-     * @return the string
-     */
-    public <T> String delete(Object id, Class<T> clazz) {
-        return elasticsearchRestTemplate.delete(String.valueOf(id), clazz);
-    }
-
-    /**
-     * 根据id批量删除数据
-     *
-     * @param <T>   the type parameter
-     * @param ids   the ids
-     * @param clazz the clazz
-     * @return the string
-     */
-    public <T> Integer delete(Collection<Object> ids, Class<T> clazz) {
-        ids.forEach(id -> delete(String.valueOf(id), clazz));
-        return ids.size();
-    }
-
-    // =================================== 查询 ===================================
-
-    /**
-     * 拼接高亮条件
-     */
-    private static void appendHighlight(@NotNull EsQueryParam searchParam, NativeSearchQueryBuilder nativeSearchQueryBuilder) {
-        if (CollUtil.isNotEmpty(searchParam.getHighlightFields())) {
-            List<HighlightBuilder.Field> highlightFields = new ArrayList<>(searchParam.getHighlightFields().size());
-            for (String highlightField : searchParam.getHighlightFields()) {
-                highlightFields.add(new HighlightBuilder.Field(highlightField).preTags(searchParam.getPreTags()).postTags(searchParam.getPostTags()));
-            }
-            nativeSearchQueryBuilder.withHighlightFields(highlightFields);
-        }
     }
 
     /**
@@ -295,19 +279,24 @@ public class ElasticSearchUtil {
     // ----------------------------------------------------------------- 构建QueryBuilder
 
     /**
-     * 构建 TermQueryBuilder
+     * 删除单条数据
+     *
+     * @param data 索引数据
+     * @return 执行结果
      */
-    @NotNull
-    private static TermQueryBuilder termQueryBuilder(@NotNull EsQueryParam searchParam) {
-        return QueryBuilders.termQuery(searchParam.getField().concat(EsConstant.KEYWORD_QUERY), searchParam.getContent());
+    public <T> String delete(T data) {
+        return elasticsearchRestTemplate.delete(data);
     }
 
     /**
-     * 构建 TermsQueryBuilder
+     * 批量删除数据
+     *
+     * @param data 索引数据
+     * @return ES查询结果
      */
-    @NotNull
-    private static TermsQueryBuilder termsQueryBuilder(@NotNull EsQueryParam searchParam) {
-        return QueryBuilders.termsQuery(searchParam.getField().concat(EsConstant.KEYWORD_QUERY), searchParam.getContents());
+    public <T> Integer delete(Collection<T> data) {
+        data.forEach(this::delete);
+        return data.size();
     }
 
     /**
@@ -327,45 +316,48 @@ public class ElasticSearchUtil {
     }
 
     /**
-     * 构建 QueryStringQueryBuilder
+     * 批量删除数据
+     *
+     * @param data 索引数据
+     * @return ES查询结果
      */
-    private static QueryStringQueryBuilder queryStringQueryBuilder(@NotNull EsQueryParam searchParam) {
-        return QueryBuilders.queryStringQuery(String.valueOf(searchParam.getContent())).field(searchParam.getField());
+    public <T> Integer delete(T[] data) {
+        return delete(Arrays.asList(data));
     }
 
     /**
-     * 构建 WildcardQueryBuilder
+     * 批量删除数据
+     *
+     * @param data 索引数据
+     * @return ES查询结果
      */
-    @NotNull
-    private static WildcardQueryBuilder wildcardQuery(@NotNull EsQueryParam searchParam) {
-        return QueryBuilders.wildcardQuery(searchParam.getField().concat(EsConstant.KEYWORD_QUERY), String.valueOf(searchParam.getContent()));
+    public <T> Integer delete(Iterator<T> data) {
+        ArrayList<T> collect = new ArrayList<>();
+        data.forEachRemaining(collect::add);
+        return delete(collect);
     }
 
     /**
-     * 构建 RangeQueryBuilder
+     * 根据id删除数据
+     *
+     * @param id    索引Id
+     * @param clazz 文档实体
+     * @return 执行结果
      */
-    @NotNull
-    private static RangeQueryBuilder rangeQueryBuilder(@NotNull EsQueryParam searchParam) {
-        RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(searchParam.getField());
-        List<EsRangeParam> rangeParams = searchParam.getEsRangeParam();
-        for (EsRangeParam rangeParam : rangeParams) {
-            rangeQueryTarget(rangeQueryBuilder, rangeParam.getValue(), rangeParam.getRange());
-        }
-        return rangeQueryBuilder;
+    public <T> String delete(Object id, Class<T> clazz) {
+        return elasticsearchRestTemplate.delete(String.valueOf(id), clazz);
     }
 
     /**
-     * 构建 MultiMatchQuery
+     * 根据id批量删除数据
+     *
+     * @param ids   索引Ids
+     * @param clazz 文档实体
+     * @return 执行结果
      */
-    @NotNull
-    private static MultiMatchQueryBuilder multiMatchQueryBuilder(@NotNull EsQueryParam searchParam) {
-        // 拼接查询字段
-        String[] fields = searchParam.getFields().toArray(new String[0]);
-        MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchParam.getContent(), fields);
-        if (ObjUtil.isNotEmpty(searchParam.getOperator())) {
-            multiMatchQueryBuilder.operator(searchParam.getOperator());
-        }
-        return multiMatchQueryBuilder;
+    public <T> Integer delete(Collection<Object> ids, Class<T> clazz) {
+        ids.forEach(id -> delete(String.valueOf(id), clazz));
+        return ids.size();
     }
 
     /**
@@ -442,10 +434,9 @@ public class ElasticSearchUtil {
     /**
      * 查询全部
      *
-     * @param <T>         the type parameter
-     * @param searchParam the search param
-     * @param clazz       the clazz
-     * @return search hits
+     * @param searchParam 查询参数
+     * @param clazz       文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> matchAll(@NotNull EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -457,10 +448,9 @@ public class ElasticSearchUtil {
     /**
      * 不会进行分词，完全匹配 [ EQ ]
      *
-     * @param <T>         the type parameter
-     * @param searchParam the search param
-     * @param clazz       the clazz
-     * @return search hits
+     * @param searchParam 查询参数
+     * @param clazz       文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> termQuery(@NotNull EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -472,10 +462,9 @@ public class ElasticSearchUtil {
     /**
      * 一个字段匹配多个值，不会进行分词，完全匹配 [ EQ ]
      *
-     * @param <T>         the type parameter
-     * @param searchParam the search param
-     * @param clazz       the clazz
-     * @return search hits
+     * @param searchParam 查询参数
+     * @param clazz       文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> termsQuery(@NotNull EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -487,10 +476,9 @@ public class ElasticSearchUtil {
     /**
      * QueryBuilders.matchPhraseQuery() 不会分词，当成一个整体去匹配，相当于 %like%
      *
-     * @param <T>         the type parameter
-     * @param searchParam the search param
-     * @param clazz       the clazz
-     * @return the search hits
+     * @param searchParam 查询参数
+     * @param clazz       文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> matchPhraseQuery(@NotNull EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -503,10 +491,9 @@ public class ElasticSearchUtil {
      * 会根据分词器进行分词，分词之后去查询
      * 单个匹配，Field不支持通配符，前缀具有高级特性
      *
-     * @param <T>         the type parameter
-     * @param searchParam the search param
-     * @param clazz       the clazz
-     * @return the search hits
+     * @param searchParam 查询参数
+     * @param clazz       文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> matchQuery(@NotNull EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -518,10 +505,9 @@ public class ElasticSearchUtil {
     /**
      * 一个值匹配多个字段，且Field有通配符
      *
-     * @param <T>         the type parameter
-     * @param searchParam the search param
-     * @param clazz       the clazz
-     * @return the es result
+     * @param searchParam 查询参数
+     * @param clazz       文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> multiMatchQuery(@NotNull EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -533,9 +519,8 @@ public class ElasticSearchUtil {
     /**
      * 通过Id查询
      *
-     * @param <T>   the type parameter
-     * @param id    the id
-     * @param clazz the clazz
+     * @param id    索引Id
+     * @param clazz 文档实体
      * @return the t
      */
     public <T> T idQuery(Object id, Class<T> clazz) {
@@ -545,10 +530,9 @@ public class ElasticSearchUtil {
     /**
      * 通过Id查询
      *
-     * @param <T>   the type parameter
-     * @param ids   the ids
-     * @param clazz the clazz
-     * @return the list
+     * @param ids   索引Ids
+     * @param clazz 文档实体
+     * @return ES查询结果
      */
     public <T> List<T> idsQuery(List<?> ids, Class<T> clazz) {
         Assert.notNull(ids, "The search Id cannot be empty");
@@ -566,9 +550,8 @@ public class ElasticSearchUtil {
     /**
      * 不使用通配符的模糊查询，左右匹配
      *
-     * @param <T>   the type parameter
-     * @param clazz the clazz
-     * @return the list
+     * @param clazz 文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> queryStringQuery(@NotNull EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -581,9 +564,8 @@ public class ElasticSearchUtil {
     /**
      * 模糊查询，支持通配符
      *
-     * @param <T>   the type parameter
-     * @param clazz the clazz
-     * @return the list
+     * @param clazz 文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> wildcardQuery(@NotNull EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -595,10 +577,9 @@ public class ElasticSearchUtil {
     /**
      * 范围查询.
      *
-     * @param <T>         the type parameter
-     * @param searchParam the search param
-     * @param clazz       the clazz
-     * @return the es result
+     * @param searchParam 查询参数
+     * @param clazz       文档实体
+     * @return ES查询结果
      */
     public <T> EsResult<T> rangeQuery(EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -610,8 +591,8 @@ public class ElasticSearchUtil {
     /**
      * 复合查询 must(and)、must_not(not)、should(or)
      *
-     * @param searchParam the index name
-     * @param clazz       the clazz
+     * @param searchParam 查询参数
+     * @param clazz       文档实体
      */
     public <T> EsResult<T> boolQuery(EsQueryParam searchParam, Class<T> clazz) {
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
@@ -692,7 +673,7 @@ public class ElasticSearchUtil {
     /**
      * 获取索引封装对象
      *
-     * @param clazz the clazz
+     * @param clazz 文档实体
      * @return the index coordinates
      */
     public IndexCoordinates getIndexCoordinates(Class<?> clazz) {
@@ -702,7 +683,7 @@ public class ElasticSearchUtil {
     /**
      * 获取索引封装对象
      *
-     * @param indexName the index name
+     * @param indexName 查询参数
      * @return the index coordinates
      */
     public IndexCoordinates getIndexCoordinates(String indexName) {

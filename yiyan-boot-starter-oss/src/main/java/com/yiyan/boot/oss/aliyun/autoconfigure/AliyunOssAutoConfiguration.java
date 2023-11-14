@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 @Configuration
 @ConditionalOnClass(AliyunOssUtil.class)
 @EnableConfigurationProperties(AliyunOssProperties.class)
-@ConditionalOnProperty(prefix = "oss.qiniu.enable", havingValue = "true")
+@ConditionalOnProperty(prefix = "oss.aliyun.enable", havingValue = "true")
 public class AliyunOssAutoConfiguration {
     /**
      * 注入属性配置类

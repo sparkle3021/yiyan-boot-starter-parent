@@ -16,4 +16,14 @@ public class EsConstant {
      * 通配符 ？ , 可匹配任意字符
      */
     public static final String WILDCARD_ONE = "?";
+
+    /**
+     * 默认高亮Tag开始标签
+     */
+    public static final String DEFAULT_PRE_TAG = "<span style='color:#f50'>";
+
+    /**
+     * 默认高亮Tag结束标签
+     */
+    public static final String DEFAULT_POST_TAG = "</span>";
 }

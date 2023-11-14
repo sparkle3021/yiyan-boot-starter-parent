@@ -24,7 +24,7 @@ import java.io.IOException;
 @Configuration
 @ConditionalOnClass(QiniuOssUtil.class)
 @EnableConfigurationProperties(QiniuOssProperties.class)
-@ConditionalOnProperty(prefix = "oss.aliyun.enable", havingValue = "true")
+@ConditionalOnProperty(prefix = "oss.qiniu.enable", havingValue = "true")
 public class QiniuOssAutoConfiguration {
     /**
      * 注入属性配置类
