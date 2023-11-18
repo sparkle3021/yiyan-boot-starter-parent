@@ -8,7 +8,7 @@
     <artifactId>yiyan-boot-starter-parent</artifactId>
     <version>0.0.1</version>
     <packaging>pom</packaging>
-    <name>yiyan-boot-starter-dependencies</name>
+    <name>yiyan-boot-starter-parent</name>
     <description>依赖版本管理</description>
 
     <properties>
@@ -113,6 +113,7 @@
                 <scope>import</scope>
             </dependency>
             <!-- Spring 组件版本依赖 End -->
+
             <!-- OHO 模块 -->
             <dependency>
                 <groupId>com.yiyan</groupId>
